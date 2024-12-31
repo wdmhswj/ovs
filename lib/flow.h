@@ -248,7 +248,11 @@ uint32_t flow_hash_symmetric_l3(const struct flow *flow, uint32_t basis);
 
 /* Initialize a flow with random fields that matter for nx_hash_fields. */
 void flow_random_hash_fields(struct flow *);
-void flow_mask_hash_fields(const struct flow *, struct flow_wildcards *,
+
+// const struct flow *：这个参数是指向流（flow）结构体的指针，flow 结构体包含了网络数据包的相关信息（如源 IP、目的 IP、端口等）。
+// struct flow_wildcards *：flow_wildcards 是一个用于指定掩码的结构体，定义了哪些字段是“通配的”（即不进行匹配，或者说字段被“忽略”）。该结构体可以在哈希操作时应用掩码规则，控制哪些字段会影响匹配。
+// enum nx_hash_fields：这个枚举类型指定了需要应用掩码的哈希字段集合。它定义了哪些字段会影响哈希值的计算，常见的字段包括源 IP、目标 IP、协议等。
+void flow_mask_hash_fields(const struct flow *, struct flow_wildcards *,    // 相关
                            enum nx_hash_fields);
 uint32_t flow_hash_fields(const struct flow *, enum nx_hash_fields,
                           uint16_t basis);

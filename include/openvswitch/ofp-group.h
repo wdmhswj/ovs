@@ -47,7 +47,7 @@ struct bucket_counter {
 /* Bucket for use in groups. */
 struct ofputil_bucket {
     struct ovs_list list_node;
-    uint16_t weight;            /* Relative weight, for "select" groups. */
+    uint16_t weight;            /* Relative weight, for "select" groups. */ // 动作桶的权重
     ofp_port_t watch_port;      /* Port whose state affects whether this bucket
                                  * is live. Only required for fast failover
                                  * groups. */
@@ -70,7 +70,7 @@ struct ofputil_bucket *ofputil_bucket_find(const struct ovs_list *,
 bool ofputil_bucket_check_duplicate_id(const struct ovs_list *);
 struct ofputil_bucket *ofputil_bucket_list_front(const struct ovs_list *);
 struct ofputil_bucket *ofputil_bucket_list_back(const struct ovs_list *);
-void ofputil_bucket_format(struct ds *, const struct ofputil_bucket *,
+void ofputil_bucket_format(struct ds *, const struct ofputil_bucket *,  // 用于格式化 ofputil_bucket，输出桶的信息
                            enum ofp11_group_type, enum ofp_version,
                            const struct ofputil_port_map *,
                            const struct ofputil_table_map *);
@@ -84,8 +84,8 @@ ofputil_bucket_has_liveness(const struct ofputil_bucket *bucket)
 
 struct ofputil_group_props {
     /* NTR selection method */
-    char selection_method[NTR_MAX_SELECTION_METHOD_LEN];
-    uint64_t selection_method_param;
+    char selection_method[NTR_MAX_SELECTION_METHOD_LEN];    // 指定了选择算法
+    uint64_t selection_method_param;                        // 指定算法的参数
     struct field_array fields;
 };
 
@@ -103,8 +103,8 @@ struct ofputil_group_mod {
                                    * OFPGC15_INSERT_BUCKET and
                                    * OFPGC15_REMOVE_BUCKET commands
                                    * execution.*/
-    struct ovs_list buckets;      /* Contains "struct ofputil_bucket"s. */
-    struct ofputil_group_props props; /* Group properties. */
+    struct ovs_list buckets;      /* Contains "struct ofputil_bucket"s. */  // 动作桶的列表
+    struct ofputil_group_props props; /* Group properties. */               // 存储与组相关的属性，可能包含选择方法
 };
 
 void ofputil_uninit_group_mod(struct ofputil_group_mod *gm);
@@ -179,7 +179,7 @@ struct ofpbuf *ofputil_encode_group_features_reply(
 void ofputil_decode_group_features_reply(const struct ofp_header *,
                                          struct ofputil_group_features *);
 
-/* Group desc reply, independent of protocol. */
+/* Group desc reply, independent of protocol. */    // 描述组的信息结构体
 struct ofputil_group_desc {
     uint8_t type;               /* One of OFPGT_*. */
     uint32_t group_id;          /* Group identifier. */

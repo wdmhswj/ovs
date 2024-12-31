@@ -121,10 +121,11 @@ rule_dpif_is_internal(const struct rule_dpif *rule)
 
 /* Groups. */
 
-enum group_selection_method {
+enum group_selection_method {   // 可能相关
     SEL_METHOD_DEFAULT,
     SEL_METHOD_DP_HASH,
     SEL_METHOD_HASH,
+    SEL_METHOD_RANDOM,  // 新增：将bucket的weight作为随机概率
 };
 
 struct group_dpif {
