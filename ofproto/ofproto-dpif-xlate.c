@@ -4995,7 +4995,7 @@ pick_dp_hash_select_group(struct xlate_ctx *ctx, struct group_dpif *group)
 static struct ofputil_bucket *
 pick_random_select_group(struct xlate_ctx *ctx, struct group_dpif *group)
 {
-     total_weight = 0;
+    uint32_t total_weight = 0;
     struct ofputil_bucket *bucket;
     LIST_FOR_EACH (bucket, list_node, &group->up.buckets) {
         if (bucket_is_alive(ctx, group, bucket, 0)) {
