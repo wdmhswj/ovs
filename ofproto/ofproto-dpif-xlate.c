@@ -4995,20 +4995,20 @@ pick_dp_hash_select_group(struct xlate_ctx *ctx, struct group_dpif *group)
 static struct ofputil_bucket *
 pick_random_select_group(struct xlate_ctx *ctx, struct group_dpif *group)
 {
-    uint32_t total_weight = 0;
+    uint32_t weight_total = 0;
     struct ofputil_bucket *bucket;
     LIST_FOR_EACH (bucket, list_node, &group->up.buckets) {
         if (bucket_is_alive(ctx, group, bucket, 0)) {
-            total_weight += (uint32_t)bucket->weight;
+            weight_total += (uint32_t)bucket->weight;
         }
     }
 
-    if (total_weight == 0) {
+    if (weight_total == 0) {
         return NULL; // 没有可用的桶
     }
 
     random_init(); // 可选的初始化
-    uint32_t random_value = random_uint32() % total_weight; // 使用 random_uint32()  生成 0 到 total_weight-1 的随机数
+    uint32_t random_value = random_uint32() % weight_total; // 使用 random_uint32()  生成 0 到 weight_total-1 的随机数
     uint32_t cumulative_weight = 0;
 
     LIST_FOR_EACH (bucket, list_node, &group->up.buckets) {
