@@ -1637,7 +1637,8 @@ parse_group_prop_ntr_selection_method(struct ofpbuf *payload,
         /* Selection_method "hash: w/o fields means default hash method. */
         gp->fields.values_size = 0;
     }
-
+    OFPPROP_LOG(&rl, false,
+                    "test");
     return 0;
 }
 
