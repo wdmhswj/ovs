@@ -1937,6 +1937,7 @@ ofputil_group_desc_format(struct ds *s, const struct ofp_header *oh,
 void
 ofputil_uninit_group_mod(struct ofputil_group_mod *gm)
 {
+    OFPPROP_LOG(&rl, false, "ofputil_uninit_group_mod begin");
     ofputil_bucket_list_destroy(&gm->buckets);
     ofputil_group_properties_destroy(&gm->props);
 }
@@ -2239,12 +2240,14 @@ ofputil_pull_ofp15_group_mod(struct ofpbuf *msg, enum ofp_version ofp_version,
     if (error) {
         ofputil_uninit_group_mod(gm);
     }
+    OFPPROP_LOG(&rl, false, "ofputil_pull_ofp15_group_mod return");
     return error;
 }
 
 static enum ofperr
 ofputil_check_group_mod(const struct ofputil_group_mod *gm)
 {
+    OFPPROP_LOG(&rl, false, "ofputil_check_group_mod begin");
     switch (gm->type) {
     case OFPGT11_INDIRECT:
         if (gm->command != OFPGC11_DELETE
@@ -2339,11 +2342,14 @@ ofputil_decode_group_mod(const struct ofp_header *oh,
     if (err) {
         return err;
     }
-
+    
     err = ofputil_check_group_mod(gm);
     if (err) {
+        OFPPROP_LOG(&rl, false, "ofputil_decode_group_mod error not null");
         ofputil_uninit_group_mod(gm);
     }
+    OFPPROP_LOG(&rl, false, "ofputil_decode_group_mod return");
+    
     return err;
 }
 
