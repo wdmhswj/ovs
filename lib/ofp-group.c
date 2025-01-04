@@ -2421,6 +2421,7 @@ ofputil_group_mod_format(struct ds *s, const struct ofp_header *oh,
     if (error) {
         return error;
     }
+    OFPPROP_LOG(&rl, false, "ofputil_group_mod_format after error judgement");
     ofputil_group_mod_format__(s, oh->version, &gm, port_map, table_map);
     ofputil_uninit_group_mod(&gm);
     OFPPROP_LOG(&rl, false, "ofputil_group_mod_format return");
