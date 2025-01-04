@@ -1940,6 +1940,7 @@ ofputil_uninit_group_mod(struct ofputil_group_mod *gm)
     OFPPROP_LOG(&rl, false, "ofputil_uninit_group_mod begin");
     ofputil_bucket_list_destroy(&gm->buckets);
     ofputil_group_properties_destroy(&gm->props);
+    OFPPROP_LOG(&rl, false, "ofputil_uninit_group_mod return");
 }
 
 static void
@@ -2359,6 +2360,7 @@ ofputil_group_mod_format__(struct ds *s, enum ofp_version ofp_version,
                            const struct ofputil_port_map *port_map,
                            const struct ofputil_table_map *table_map)
 {
+    OFPPROP_LOG(&rl, false, "ofputil_group_mod_format__ begin");
     bool bucket_command = false;
 
     ds_put_char(s, '\n');
@@ -2404,6 +2406,7 @@ ofputil_group_mod_format__(struct ds *s, enum ofp_version ofp_version,
     ofputil_group_format(s, gm->group_id, gm->type, NULL, &gm->buckets,
                          &gm->props, ofp_version, bucket_command,
                          port_map, table_map);
+    OFPPROP_LOG(&rl, false, "ofputil_group_mod_format__ return");
 }
 
 enum ofperr
@@ -2420,5 +2423,6 @@ ofputil_group_mod_format(struct ds *s, const struct ofp_header *oh,
     }
     ofputil_group_mod_format__(s, oh->version, &gm, port_map, table_map);
     ofputil_uninit_group_mod(&gm);
+    OFPPROP_LOG(&rl, false, "ofputil_group_mod_format return");
     return 0;
 }
