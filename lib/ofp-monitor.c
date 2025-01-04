@@ -1452,7 +1452,7 @@ ofputil_decode_requestforward(const struct ofp_header *outer,
     } else {
         return OFPERR_OFPBFC_MSG_UNSUP;
     }
-    OFPPROP_LOG(&rl, false, "ofputil_decode_requestforward return");
+    VLOG_WARN_RL(&rl, "ofputil_decode_requestforward return");
     return 0;
 }
 
