@@ -1773,6 +1773,7 @@ ofputil_decode_ofp15_group_desc_reply(struct ofputil_group_desc *gd,
     error = parse_ofp15_group_properties(
         msg, gd->type, OFPGC15_ADD, &gd->props,
         length - sizeof *ogds - bucket_list_len);
+    OFPPROP_LOG(&rl, false, "ofputil_decode_ofp15_group_desc_reply before error judgement");
     if (error) {
         OFPPROP_LOG(&rl, false, "ofputil_decode_ofp15_group_desc_reply error not null");
         ofputil_uninit_group_desc(gd);
