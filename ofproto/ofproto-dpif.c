@@ -5443,6 +5443,9 @@ group_set_selection_method(struct group_dpif *group)
             VLOG_DBG("No hash fields. Falling back to default hash method.");
             group->selection_method = SEL_METHOD_DEFAULT;
         }
+    } else if (!strcmp(selection_method, "random")) {
+            VLOG_DBG("Selection method specified: random.");
+            group->selection_method = SEL_METHOD_RANDOM;
     } else {
         /* Parsing of groups should ensure this never happens */
         OVS_NOT_REACHED();
