@@ -344,7 +344,7 @@ ofputil_group_stats_to_ofp13(const struct ofputil_group_stats *gs,
  * replies already begun in 'replies' and appends it to the list.  'replies'
  * must have originally been initialized with ofpmp_init(). */
 void
-ofputil_append_group_stats(struct ovs_list *replies,
+ofputil_append_group_stats(struct ovs_list *replies,                            // 将一个 OpenFlow group statistics 统计信息 (gs) 以正确的格式编码并附加到已经开始的 OpenFlow 消息列表 (replies) 中
                            const struct ofputil_group_stats *gs)
 {
     size_t bucket_counter_size;
@@ -1314,7 +1314,7 @@ ofputil_append_group_desc_reply(const struct ofputil_group_desc *gds,
 }
 
 static enum ofperr
-ofputil_pull_ofp11_buckets(struct ofpbuf *msg, size_t buckets_length,
+ofputil_pull_ofp11_buckets(struct ofpbuf *msg, size_t buckets_length,               // 处理 OpenFlow 群组表（Group Table）中 buckets 的解析
                            enum ofp_version version, struct ovs_list *buckets)
 {
     struct ofp11_bucket *ob;
@@ -2125,7 +2125,7 @@ ofputil_encode_group_mod(enum ofp_version ofp_version,
 }
 
 static enum ofperr
-ofputil_pull_ofp11_group_mod(struct ofpbuf *msg, enum ofp_version ofp_version,
+ofputil_pull_ofp11_group_mod(struct ofpbuf *msg, enum ofp_version ofp_version,      // 从给定的 OpenFlow 消息缓冲区中解析 OpenFlow 1.1+ 格式的 Group Modification (Group Mod) 消息，并将解析结果填充到 struct ofputil_group_mod 结构中
                              struct ofputil_group_mod *gm)
 {
     const struct ofp11_group_mod *ogm;
@@ -2251,9 +2251,9 @@ ofputil_check_group_mod(const struct ofputil_group_mod *gm)
 
     struct ofputil_bucket *bucket;
     LIST_FOR_EACH (bucket, list_node, &gm->buckets) {
-        if (bucket->weight && gm->type != OFPGT11_SELECT
+        if (bucket->weight && gm->type != OFPGT11_SELECT    
             && gm->command != OFPGC15_INSERT_BUCKET) {
-            return OFPERR_OFPGMFC_INVALID_GROUP;
+            return OFPERR_OFPGMFC_INVALID_GROUP;            // bucket有权重时，必须是select类型，必须是OFPGC15_INSERT_BUCKET
         }
 
         switch (gm->type) {

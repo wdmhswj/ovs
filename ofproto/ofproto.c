@@ -1851,7 +1851,7 @@ ofproto_type_wait(const char *datapath_type)
 }
 
 int
-ofproto_run(struct ofproto *p)
+ofproto_run(struct ofproto *p)      // Open vSwitch 中的核心运行循环，用于维护 OpenFlow 交换机的状态、规则表、端口配置以及与控制器的通信。通常会在主循环中被周期性调用，以确保交换机始终处于正常工作状态
 {
     int error;
     uint64_t new_seq;
@@ -7168,7 +7168,7 @@ handle_meter_request(struct ofconn *ofconn, const struct ofp_header *request,
 
 /* Returned group is RCU protected. */
 static struct ofgroup *
-ofproto_group_lookup__(const struct ofproto *ofproto, uint32_t group_id,
+ofproto_group_lookup__(const struct ofproto *ofproto, uint32_t group_id,        // 通过群组 ID 和 OpenFlow 协议版本查找并返回一个符合条件的群组。如果未找到匹配的群组，返回 NULL。
                        ovs_version_t version)
 {
     struct ofgroup *group;
@@ -7257,7 +7257,7 @@ append_group_stats(struct ofgroup *group, struct ovs_list *replies)
 }
 
 static void
-handle_group_request(struct ofconn *ofconn,
+handle_group_request(struct ofconn *ofconn,                                     //  Open vSwitch 中处理与 Group 相关的请求的核心部分，它根据不同的请求类型（所有 Group 或单个 Group）查找对应的 Group，并通过回调机制执行相应的操作，最后将结果发送回 OpenFlow 控制器。
                      const struct ofp_header *request, uint32_t group_id,
                      void (*cb)(struct ofgroup *, struct ovs_list *replies))
     OVS_EXCLUDED(ofproto_mutex)
@@ -7287,7 +7287,7 @@ handle_group_request(struct ofconn *ofconn,
 }
 
 static enum ofperr
-handle_group_stats_request(struct ofconn *ofconn,
+handle_group_stats_request(struct ofconn *ofconn,               // 处理 OpenFlow 的群组统计请求（Group Stats Request）
                            const struct ofp_header *request)
 {
     uint32_t group_id;
@@ -8651,8 +8651,8 @@ handle_tlv_table_request(struct ofconn *ofconn, const struct ofp_header *oh)
 /* Processes the single-part OpenFlow message 'oh' that was received on
  * 'ofconn'.  Returns an ofperr that, if nonzero, the caller should send back
  * to the controller. */
-static enum ofperr
-handle_single_part_openflow(struct ofconn *ofconn, const struct ofp_header *oh,
+static enum ofperr 
+handle_single_part_openflow(struct ofconn *ofconn, const struct ofp_header *oh,     // 处理单一部分 OpenFlow 消息的函数。它根据不同的 OpenFlow 消息类型 (ofptype) 调用相应的处理函数。如果消息类型无法处理，函数会返回相应的错误码。
                             enum ofptype type)
     OVS_EXCLUDED(ofproto_mutex)
 {
@@ -8680,7 +8680,7 @@ handle_single_part_openflow(struct ofconn *ofconn, const struct ofp_header *oh,
         return handle_flow_mod(ofconn, oh);
 
     case OFPTYPE_GROUP_MOD:
-        return handle_group_mod(ofconn, oh);
+        return handle_group_mod(ofconn, oh);        // 与群组表的修改操作相关
 
     case OFPTYPE_TABLE_MOD:
         return handle_table_mod(ofconn, oh);
@@ -8765,13 +8765,13 @@ handle_single_part_openflow(struct ofconn *ofconn, const struct ofp_header *oh,
         return handle_meter_features_request(ofconn, oh);
 
     case OFPTYPE_GROUP_STATS_REQUEST:
-        return handle_group_stats_request(ofconn, oh);
+        return handle_group_stats_request(ofconn, oh);              // 请求群组表的统计数据
 
     case OFPTYPE_GROUP_DESC_STATS_REQUEST:
-        return handle_group_desc_stats_request(ofconn, oh);
+        return handle_group_desc_stats_request(ofconn, oh);         // 请求群组表的描述性统计数据
 
-    case OFPTYPE_GROUP_FEATURES_STATS_REQUEST:
-        return handle_group_features_stats_request(ofconn, oh);
+    case OFPTYPE_GROUP_FEATURES_STATS_REQUEST:  
+        return handle_group_features_stats_request(ofconn, oh);     // 请求群组表的特性统计数据
 
     case OFPTYPE_QUEUE_GET_CONFIG_REQUEST:
         return handle_queue_get_config_request(ofconn, oh);
@@ -8842,7 +8842,7 @@ handle_single_part_openflow(struct ofconn *ofconn, const struct ofp_header *oh,
 }
 
 static void
-handle_openflow(struct ofconn *ofconn, const struct ovs_list *msgs)
+handle_openflow(struct ofconn *ofconn, const struct ovs_list *msgs)         // 处理来自 OpenFlow 控制器的一组消息（msgs）。它解析消息类型并调用相应的处理函数，同时处理可能出现的错误
     OVS_EXCLUDED(ofproto_mutex)
 {
     COVERAGE_INC(ofproto_recv_openflow);

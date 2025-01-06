@@ -5288,7 +5288,7 @@ group_destruct(struct ofgroup *group_)
 }
 
 static enum ofperr
-group_get_stats(const struct ofgroup *group_, struct ofputil_group_stats *ogs)
+group_get_stats(const struct ofgroup *group_, struct ofputil_group_stats *ogs)  // 获取某个 OpenFlow Group 的统计数据（总包数、总字节数、每个 Bucket 的统计信息），并将这些数据填充到一个传入的结构体 ogs 中
 {
     struct group_dpif *group = group_dpif_cast(group_);
 

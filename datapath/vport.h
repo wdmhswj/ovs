@@ -80,18 +80,19 @@ struct vport_portids {
  * @detach_list: list used for detaching vport in net-exit call.
  * @rcu: RCU callback head for deferred destruction.
  */
-struct vport {
+struct vport {	// 网桥中各个端口对应的结构体
 	struct net_device *dev;
-	struct datapath	*dp;
-	struct vport_portids __rcu *upcall_portids;
-	u16 port_no;
+	struct datapath	*dp;							// 网桥结构体指针
+	struct vport_portids __rcu *upcall_portids;		// Netlink 收到数据包时使用的端口id
+	u16 port_no;									// 端口号，唯一标识该端口
 
+	// 因为一个网桥上有多个端口，而这些端口都是用哈希链表来存储的，所以这是链表元素（里面没有数据，只有 next 和 prev 前驱后继指针，数据部分就是 vport 结构体中的其他成员）
 	struct hlist_node hash_node;
-	struct hlist_node dp_hash_node;
-	const struct vport_ops *ops;
+	struct hlist_node dp_hash_node;					// 网桥的哈希链表元素
+	const struct vport_ops *ops;					// 这是端口结构体的操作函数指针结构体，结构体里面存放了很多操作函数的函数指针
 
 	struct list_head detach_list;
-	struct rcu_head rcu;
+	struct rcu_head rcu;							// 一种锁机制
 };
 
 /**
@@ -104,15 +105,15 @@ struct vport {
  * @dp: New vport's datapath.
  * @port_no: New vport's port number.
  */
-struct vport_parms {
-	const char *name;
-	enum ovs_vport_type type;
-	struct nlattr *options;
+struct vport_parms {								// 创建一个新vport所需参数的结构体
+	const char *name;								// 新端口的名称
+	enum ovs_vport_type type;						// 端口类型
+	struct nlattr *options;							// 
 
 	/* For ovs_vport_alloc(). */
-	struct datapath *dp;
-	u16 port_no;
-	struct nlattr *upcall_portids;
+	struct datapath *dp;							// 端口属于哪个网桥
+	u16 port_no;									// 端口号
+	struct nlattr *upcall_portids;					// 和Netlink通信时使用的id
 };
 
 /**
@@ -131,7 +132,7 @@ struct vport_parms {
  * @send: Send a packet on the device.
  * zero for dropped packets or negative for error.
  */
-struct vport_ops {
+struct vport_ops {													//端口 vport 操作函数的函数指针结构体，是操作函数的集合，里面存放了所有有关 vport 操作函数的函数指针
 	enum ovs_vport_type type;
 
 	/* Called with ovs_mutex. */

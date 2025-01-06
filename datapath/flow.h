@@ -72,10 +72,14 @@ struct ovs_key_nsh {
 	__be32 context[NSH_MD1_CONTEXT_SIZE];
 };
 
+// key值，主要是提取数据包中协议相关信息，后期进行流表匹配的关键结构
 struct sw_flow_key {
+	// 隧道相关的变量
 	u8 tun_opts[255];
 	u8 tun_opts_len;
 	struct ip_tunnel_key tun_key;  /* Encapsulating tunnel key. */
+
+	// 包的物理层信息
 	struct {
 		u32	priority;	/* Packet QoS priority. */
 		u32	skb_mark;	/* SKB mark. */

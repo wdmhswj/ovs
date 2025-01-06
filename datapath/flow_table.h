@@ -47,14 +47,15 @@ struct mask_array {
 };
 
 struct table_instance {
-	struct hlist_head *buckets;
-	unsigned int n_buckets;
-	struct rcu_head rcu;
+	struct hlist_head *buckets;	// 哈希桶地址指针
+	unsigned int n_buckets;		// 哈希桶个数
+	struct rcu_head rcu;		// rcu包含机制
 	int node_ver;
-	u32 hash_seed;
-	bool keep_flows;
+	u32 hash_seed;				// 哈希算法需要的种子，后期匹配时要用到
+	bool keep_flows;			// 是否保留流表项
 };
 
+// 流表
 struct flow_table {
 	struct table_instance __rcu *ti;
 	struct table_instance __rcu *ufid_ti;

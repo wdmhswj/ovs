@@ -75,15 +75,15 @@ struct dp_stats_percpu {
  * Context: See the comment on locking at the top of datapath.c for additional
  * locking information.
  */
-struct datapath {
+struct datapath {										// 网桥结构体
 	struct rcu_head rcu;
-	struct list_head list_node;
+	struct list_head list_node;							// 网桥哈希链表元素
 
 	/* Flow table. */
-	struct flow_table table;
+	struct flow_table table;							// 流表
 
 	/* Switch ports. */
-	struct hlist_head *ports;
+	struct hlist_head *ports;							// 一个网桥有多个端口，这些端口都是用哈希链表来链接的
 
 	/* Stats. */
 	struct dp_stats_percpu __percpu *stats_percpu;

@@ -564,7 +564,7 @@ void ofproto_rule_reduce_timeouts(struct rule *rule, uint16_t idle_timeout,
  *
  * With few exceptions, ofproto implementations may look at these fields but
  * should not modify them. */
-struct ofgroup {
+struct ofgroup {                                                                // 用于存储和管理 Group 相关的信息
     struct cmap_node cmap_node; /* In ofproto's "groups" cmap. */
 
     /* Group versioning. */

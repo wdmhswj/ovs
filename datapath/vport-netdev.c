@@ -40,7 +40,7 @@
 static struct vport_ops ovs_netdev_vport_ops;
 
 /* Must be called with rcu_read_lock. */
-void netdev_port_receive(struct sk_buff *skb, struct ip_tunnel_info *tun_info)
+void netdev_port_receive(struct sk_buff *skb, struct ip_tunnel_info *tun_info)	// 处理接收报文
 {
 	struct vport *vport;
 

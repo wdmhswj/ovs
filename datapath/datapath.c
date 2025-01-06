@@ -231,7 +231,7 @@ void ovs_dp_detach_port(struct vport *p)
 }
 
 /* Must be called with rcu_read_lock. */
-void ovs_dp_process_packet(struct sk_buff *skb, struct sw_flow_key *key)
+void ovs_dp_process_packet(struct sk_buff *skb, struct sw_flow_key *key)	// 处理通过 OVS 数据路径的每个数据包。它主要负责查找与数据包匹配的流表项（flow），执行相关的动作（actions），并更新数据平面的统计信息。
 {
 	const struct vport *p = OVS_CB(skb)->input_vport;
 	struct datapath *dp = p->dp;
@@ -2619,23 +2619,23 @@ static int __init dp_init(void)
 	pr_info("Open vSwitch switching datapath %s\n", VERSION);
 
 	ovs_nsh_init();
-	err = action_fifos_init();
+	err = action_fifos_init();						// 初始化action_fifos空间
 	if (err)
 		goto error;
 
-	err = ovs_internal_dev_rtnl_link_register();
+	err = ovs_internal_dev_rtnl_link_register();	// 注册ovs的internal设备的rtnl
 	if (err)
 		goto error_action_fifos_exit;
 
-	err = ovs_flow_init();
+	err = ovs_flow_init();							// 初始化flow模块，分配相关的cache
 	if (err)
 		goto error_unreg_rtnl_link;
 
-	err = ovs_vport_init();
+	err = ovs_vport_init();							// 初始化vport，分配hash节点空间
 	if (err)
 		goto error_flow_exit;
 
-	err = register_pernet_device(&ovs_net_ops);
+	err = register_pernet_device(&ovs_net_ops);		// 注册ovs网络空间类型设备
 	if (err)
 		goto error_vport_exit;
 
@@ -2643,7 +2643,7 @@ static int __init dp_init(void)
 	if (err)
 		goto error_netns_exit;
 
-	err = register_netdevice_notifier(&ovs_dp_device_notifier);
+	err = register_netdevice_notifier(&ovs_dp_device_notifier);	// 注册dp的internal类型设备的通知链
 	if (err)
 		goto error_compat_exit;
 
@@ -2651,7 +2651,7 @@ static int __init dp_init(void)
 	if (err)
 		goto error_unreg_notifier;
 
-	err = dp_register_genl();
+	err = dp_register_genl();						// 注册dp的netLink family
 	if (err < 0)
 		goto error_unreg_netdev;
 
@@ -2693,7 +2693,7 @@ static void dp_cleanup(void)
 	ovs_nsh_cleanup();
 }
 
-module_init(dp_init);
+module_init(dp_init);									// 模块初始化
 module_exit(dp_cleanup);
 
 MODULE_DESCRIPTION("Open vSwitch switching datapath");

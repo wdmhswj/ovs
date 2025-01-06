@@ -1257,7 +1257,7 @@ static int execute_check_pkt_len(struct datapath *dp, struct sk_buff *skb,
 }
 
 /* Execute a list of actions against 'skb'. */
-static int do_execute_actions(struct datapath *dp, struct sk_buff *skb,
+static int do_execute_actions(struct datapath *dp, struct sk_buff *skb,		// 执行动作
 			      struct sw_flow_key *key,
 			      const struct nlattr *attr, int len)
 {
