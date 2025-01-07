@@ -4858,7 +4858,7 @@ pick_random_select_group(struct xlate_ctx *ctx, struct group_dpif *group)
     // printf("pick_random_select_group begin\n");
     // // 关闭文件（恢复输出到终端）
     // fclose(stdout);
-    redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "pick_random_select_group begin", __LINE__);
+    redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "pick_random_select_group begin", __LINE__, __FILE__);
 
     VLOG_INFO("pick_random_select_group begin");
     uint32_t weight_total = 0;
@@ -4903,7 +4903,7 @@ pick_select_group(struct xlate_ctx *ctx, struct group_dpif *group)
     // printf("pick_select_group begin\n");
     // // 关闭文件（恢复输出到终端）
     // fclose(stdout);
-    redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "pick_select_group begin", __LINE__);
+    redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "pick_select_group begin", __LINE__, __FILE__);
 
     /* Select groups may access flow keys beyond L2 in order to
      * select a bucket. Recirculate as appropriate to make this possible.
@@ -4944,7 +4944,7 @@ xlate_group_action__(struct xlate_ctx *ctx, struct group_dpif *group,
     // printf("xlate_group_action__ begin\n");
     // // 关闭文件（恢复输出到终端）
     // fclose(stdout);
-    redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "xlate_group_action__ begin", __LINE__);
+    redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "xlate_group_action__ begin", __LINE__, __FILE__);
 
     VLOG_INFO("xlate_group_action__ begin");
     if (group->up.type == OFPGT11_ALL || group->up.type == OFPGT11_INDIRECT) {
