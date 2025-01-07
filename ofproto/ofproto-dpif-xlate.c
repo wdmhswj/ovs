@@ -4681,7 +4681,12 @@ static void
 xlate_group_bucket(struct xlate_ctx *ctx, struct ofputil_bucket *bucket,
                    bool is_last_action)
 {
-    VLOG_INFO("xlate_group_bucket begin");
+    redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "xlate_group_bucket begin", __LINE__, __FILE__);
+    // 打印桶的信息
+    char log_message[256];
+    snprintf(log_message, sizeof(log_message), "Processing bucket ID: %"PRIu32, bucket->bucket_id);
+    redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", log_message, __LINE__, __FILE__);
+
     struct ovs_list *old_trace = ctx->xin->trace;
     if (OVS_UNLIKELY(ctx->xin->trace)) {
         char *s = xasprintf("bucket %"PRIu32, bucket->bucket_id);
@@ -4694,6 +4699,11 @@ xlate_group_bucket(struct xlate_ctx *ctx, struct ofputil_bucket *bucket,
     struct ofpbuf action_list = OFPBUF_STUB_INITIALIZER(action_list_stub);
     struct ofpbuf action_set = ofpbuf_const_initializer(bucket->ofpacts,
                                                         bucket->ofpacts_len);
+
+    // 打印即将执行的动作
+    snprintf(log_message, sizeof(log_message), "Executing %zu actions in bucket %"PRIu32, action_set.size, bucket->bucket_id);
+    redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", log_message, __LINE__, __FILE__);
+
     struct flow old_flow = ctx->xin->flow;
     bool old_was_mpls = ctx->was_mpls;
 
@@ -4704,6 +4714,10 @@ xlate_group_bucket(struct xlate_ctx *ctx, struct ofputil_bucket *bucket,
     ctx->depth--;
 
     ofpbuf_uninit(&action_list);
+
+    // 在动作执行完后记录日志
+    snprintf(log_message, sizeof(log_message), "Finished executing actions for bucket %"PRIu32, bucket->bucket_id);
+    redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", log_message, __LINE__, __FILE__);
 
     /* Check if need to freeze. */
     if (ctx->freezing) {
@@ -4885,7 +4899,6 @@ pick_random_select_group(struct xlate_ctx *ctx, struct group_dpif *group)
         "Random value generated: %u (range: 0 to %u)", random_value, weight_total - 1);
     redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", log_message, __LINE__, __FILE__);
 
-    redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "testtest", __LINE__, __FILE__);
     uint32_t cumulative_weight = 0;
 
     LIST_FOR_EACH (bucket, list_node, &group->up.buckets) {
@@ -4958,15 +4971,8 @@ static void
 xlate_group_action__(struct xlate_ctx *ctx, struct group_dpif *group,
                      bool is_last_action)
 {
-    // // 将标准输出重定向到文件 "output.txt"（以追加模式）
-    // freopen("/home/sdn/Desktop/ovs_log.txt", "a", stdout);
-    // // 使用 printf 输出内容到文件（而不是标准输出）
-    // printf("xlate_group_action__ begin\n");
-    // // 关闭文件（恢复输出到终端）
-    // fclose(stdout);
     redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "xlate_group_action__ begin", __LINE__, __FILE__);
 
-    VLOG_INFO("xlate_group_action__ begin");
     if (group->up.type == OFPGT11_ALL || group->up.type == OFPGT11_INDIRECT) {
         struct ovs_list *last_bucket = group->up.buckets.prev;
         struct ofputil_bucket *bucket;
@@ -4979,6 +4985,12 @@ xlate_group_action__(struct xlate_ctx *ctx, struct group_dpif *group,
         struct ofputil_bucket *bucket;
         if (group->up.type == OFPGT11_SELECT) {
             bucket = pick_select_group(ctx, group);
+
+            char log_message[256];
+            snprintf(log_message, sizeof(log_message), 
+                    "pick_select_group() has returned: Selected bucket: %p", bucket);
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", log_message, __LINE__, __FILE__);
+
         } else if (group->up.type == OFPGT11_FF) {
             bucket = pick_ff_group(ctx, group);
         } else {
@@ -4986,11 +4998,19 @@ xlate_group_action__(struct xlate_ctx *ctx, struct group_dpif *group,
         }
 
         if (bucket) {
+            char log_message[256];
+            snprintf(log_message, sizeof(log_message), 
+                    "bucket not null");
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", log_message, __LINE__, __FILE__);
             xlate_report(ctx, OFT_DETAIL, "using bucket %"PRIu32,
                          bucket->bucket_id);
             xlate_group_bucket(ctx, bucket, is_last_action);
             xlate_group_stats(ctx, group, bucket);
         } else {
+            char log_message[256];
+            snprintf(log_message, sizeof(log_message), 
+                    "bucket is null");
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", log_message, __LINE__, __FILE__);
             xlate_report(ctx, OFT_DETAIL, "no live bucket");
             if (ctx->xin->xcache) {
                 ofproto_group_unref(&group->up);
@@ -5003,7 +5023,7 @@ static bool
 xlate_group_action(struct xlate_ctx *ctx, uint32_t group_id,
                    bool is_last_action)
 {
-    VLOG_INFO("xlate_group_action begin");
+    redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "xlate_group_action begin", __LINE__, __FILE__);
     if (xlate_resubmit_resource_check(ctx)) {
         struct group_dpif *group;
 
@@ -5011,6 +5031,7 @@ xlate_group_action(struct xlate_ctx *ctx, uint32_t group_id,
         group = group_dpif_lookup(ctx->xbridge->ofproto, group_id,
                                   ctx->xin->tables_version, ctx->xin->xcache);
         if (!group) {
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "group is null", __LINE__, __FILE__);
             /* XXX: Should set ctx->error ? */
             xlate_report(ctx, OFT_WARN, "output to nonexistent group %"PRIu32,
                          group_id);
@@ -5498,30 +5519,37 @@ xlate_output_action(struct xlate_ctx *ctx, ofp_port_t port,
                     bool is_last_action, bool truncate,
                     bool group_bucket_action)
 {
+    redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "xlate_output_action begin", __LINE__, __FILE__);
     ofp_port_t prev_nf_output_iface = ctx->nf_output_iface;
 
     ctx->nf_output_iface = NF_OUT_DROP;
 
     switch (port) {
     case OFPP_IN_PORT:
+        redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPP_IN_PORT", __LINE__, __FILE__);
         compose_output_action(ctx, ctx->xin->flow.in_port.ofp_port, NULL,
                               is_last_action, truncate);
         break;
     case OFPP_TABLE:
+        redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPP_TABLE", __LINE__, __FILE__);
         xlate_table_action(ctx, ctx->xin->flow.in_port.ofp_port,
                            0, may_packet_in, true, false, false,
                            do_xlate_actions);
         break;
     case OFPP_NORMAL:
+        redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPP_NORMAL", __LINE__, __FILE__);
         xlate_normal(ctx);
         break;
     case OFPP_FLOOD:
+        redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPP_FLOOD", __LINE__, __FILE__);
         flood_packets(ctx, false, is_last_action);
         break;
     case OFPP_ALL:
+        redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPP_ALL", __LINE__, __FILE__);
         flood_packets(ctx, true, is_last_action);
         break;
     case OFPP_CONTROLLER:
+        redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPP_CONTROLLER", __LINE__, __FILE__);
         xlate_controller_action(ctx, controller_len,
                                 (ctx->in_packet_out ? OFPR_PACKET_OUT
                                  : group_bucket_action ? OFPR_GROUP
@@ -5530,17 +5558,23 @@ xlate_output_action(struct xlate_ctx *ctx, ofp_port_t port,
                                 0, UINT32_MAX, NULL, 0);
         break;
     case OFPP_NONE:
+        redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPP_NONE", __LINE__, __FILE__);
         break;
     case OFPP_LOCAL:
+        redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPP_LOCAL", __LINE__, __FILE__);
     default:
+        redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case default", __LINE__, __FILE__);
         if (port != ctx->xin->flow.in_port.ofp_port) {
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "port != in_port", __LINE__, __FILE__);
             compose_output_action(ctx, port, NULL, is_last_action, truncate);
         } else {
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "port == in_port", __LINE__, __FILE__);
             xlate_report_info(ctx, "skipping output to input port");
         }
         break;
     }
 
+    redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "other cases", __LINE__, __FILE__);
     if (prev_nf_output_iface == NF_OUT_FLOOD) {
         ctx->nf_output_iface = NF_OUT_FLOOD;
     } else if (ctx->nf_output_iface == NF_OUT_DROP) {
@@ -7240,7 +7274,7 @@ do_xlate_actions(const struct ofpact *ofpacts, size_t ofpacts_len,
                  struct xlate_ctx *ctx, bool is_last_action,
                  bool group_bucket_action)
 {
-    VLOG_INFO("do_xlate_actions begin");
+    redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "do_xlate_actions begin", __LINE__, __FILE__);
     struct flow_wildcards *wc = ctx->wc;
     struct flow *flow = &ctx->xin->flow;
     const struct ofpact *a;
@@ -7289,12 +7323,14 @@ do_xlate_actions(const struct ofpact *ofpacts, size_t ofpacts_len,
 
         switch (a->type) {
         case OFPACT_OUTPUT:
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPACT_OUTPUT", __LINE__, __FILE__);
             xlate_output_action(ctx, ofpact_get_OUTPUT(a)->port,
                                 ofpact_get_OUTPUT(a)->max_len, true, last,
                                 false, group_bucket_action);
             break;
 
         case OFPACT_GROUP:
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPACT_GROUP", __LINE__, __FILE__);
             if (xlate_group_action(ctx, ofpact_get_GROUP(a)->group_id, last)) {
                 /* Group could not be found. */
 
