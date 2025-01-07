@@ -4886,6 +4886,7 @@ static struct ofputil_bucket *
 pick_select_group(struct xlate_ctx *ctx, struct group_dpif *group)
 {
     VLOG_INFO("pick_select_group begin");
+    printf("pick_select_group begin\n");
     /* Select groups may access flow keys beyond L2 in order to
      * select a bucket. Recirculate as appropriate to make this possible.
      */
