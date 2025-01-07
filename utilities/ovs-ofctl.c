@@ -3044,7 +3044,7 @@ static void
 bundle_group_mod__(const char *remote, struct ofputil_group_mod *gms,
                    size_t n_gms, enum ofputil_protocol usable_protocols)
 {
-    printf("bundle_group_mod__ begin");
+    printf("bundle_group_mod__ begin\n");
     enum ofputil_protocol protocol;
     enum ofp_version version;
     struct vconn *vconn;
@@ -3076,7 +3076,7 @@ static void
 ofctl_group_mod__(const char *remote, struct ofputil_group_mod *gms,
                   size_t n_gms, enum ofputil_protocol usable_protocols)
 {
-    printf("ofctl_group_mod__ begin");
+    printf("ofctl_group_mod__ begin\n");
     enum ofputil_protocol protocol;
     struct ofputil_group_mod *gm;
     enum ofp_version version;
@@ -3130,6 +3130,7 @@ ofctl_group_mod_file(int argc OVS_UNUSED, char *argv[], int command)
 static void
 ofctl_group_mod(int argc, char *argv[], uint16_t command)
 {
+    printf("ofctl_group_mod begin");
     if (argc > 2 && !strcmp(argv[2], "-")) {
         ofctl_group_mod_file(argc, argv, command);
     } else {
@@ -3151,6 +3152,7 @@ ofctl_group_mod(int argc, char *argv[], uint16_t command)
 static void
 ofctl_add_group(struct ovs_cmdl_context *ctx)
 {
+    printf("ofctl_add_group begin");
     ofctl_group_mod(ctx->argc, ctx->argv, OFPGC11_ADD);
 }
 
@@ -3163,6 +3165,7 @@ ofctl_add_groups(struct ovs_cmdl_context *ctx)
 static void
 ofctl_mod_group(struct ovs_cmdl_context *ctx)
 {
+    printf("ofctl_mod_group begin");
     ofctl_group_mod(ctx->argc, ctx->argv,
                     may_create ? OFPGC11_ADD_OR_MOD : OFPGC11_MODIFY);
 }
@@ -3170,18 +3173,21 @@ ofctl_mod_group(struct ovs_cmdl_context *ctx)
 static void
 ofctl_del_groups(struct ovs_cmdl_context *ctx)
 {
+    printf("ofctl_del_groups begin");
     ofctl_group_mod(ctx->argc, ctx->argv, OFPGC11_DELETE);
 }
 
 static void
 ofctl_insert_bucket(struct ovs_cmdl_context *ctx)
 {
+    printf("ofctl_insert_bucket begin");
     ofctl_group_mod(ctx->argc, ctx->argv, OFPGC15_INSERT_BUCKET);
 }
 
 static void
 ofctl_remove_bucket(struct ovs_cmdl_context *ctx)
 {
+    printf("ofctl_remove_bucket begin");
     ofctl_group_mod(ctx->argc, ctx->argv, OFPGC15_REMOVE_BUCKET);
 }
 
@@ -4197,7 +4203,7 @@ ofctl_parse_flows(struct ovs_cmdl_context *ctx)
 static void
 ofctl_parse_group(struct ovs_cmdl_context *ctx)
 {
-    printf("ofctl_parse_group begin");
+    printf("ofctl_parse_group begin\n");
     enum ofputil_protocol usable_protocols;
     struct ofputil_group_mod gm;
     char *error = parse_ofp_group_mod_str(&gm, OFPGC11_ADD, ctx->argv[1], NULL,
