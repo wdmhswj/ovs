@@ -123,6 +123,7 @@ enum group_selection_method {
     SEL_METHOD_DEFAULT,
     SEL_METHOD_DP_HASH,
     SEL_METHOD_HASH,
+    SEL_METHOD_RANDOM,  // 新增：将bucket的weight作为随机概率
 };
 
 struct group_dpif {

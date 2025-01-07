@@ -47,7 +47,7 @@ struct bucket_counter {
 /* Bucket for use in groups. */
 struct ofputil_bucket {
     struct ovs_list list_node;
-    uint16_t weight;            /* Relative weight, for "select" groups. */
+    uint16_t weight;            /* Relative weight, for "select" groups. */     // 动作桶的权重
     ofp_port_t watch_port;      /* Port whose state affects whether this bucket
                                  * is live. Only required for fast failover
                                  * groups. */
@@ -110,7 +110,7 @@ struct ofpbuf *ofputil_encode_group_mod(enum ofp_version ofp_version,
 enum ofperr ofputil_decode_group_mod(const struct ofp_header *,
                                      struct ofputil_group_mod *);
 
-void ofputil_group_mod_format__(struct ds *, enum ofp_version,
+void ofputil_group_mod_format__(struct ds *, enum ofp_version,                  
                                 const struct ofputil_group_mod *,
                                 const struct ofputil_port_map *,
                                 const struct ofputil_table_map *);
@@ -174,11 +174,11 @@ void ofputil_decode_group_features_reply(const struct ofp_header *,
                                          struct ofputil_group_features *);
 
 /* Group desc reply, independent of protocol. */
-struct ofputil_group_desc {
+struct ofputil_group_desc {                                                 // 描述组的信息结构体
     uint8_t type;               /* One of OFPGT_*. */
     uint32_t group_id;          /* Group identifier. */
-    struct ovs_list buckets;    /* Contains "struct ofputil_bucket"s. */
-    struct ofputil_group_props props; /* Group properties. */
+    struct ovs_list buckets;    /* Contains "struct ofputil_bucket"s. */    // 动作桶的列表
+    struct ofputil_group_props props; /* Group properties. */               // 存储与组相关的属性，可能包含选择方法
 };
 
 void ofputil_uninit_group_desc(struct ofputil_group_desc *gd);

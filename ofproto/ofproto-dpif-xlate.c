@@ -68,6 +68,8 @@
 #include "uuid.h"
 #include "vlan-bitmap.h"
 
+#include "random.h"
+
 COVERAGE_DEFINE(xlate_actions);
 COVERAGE_DEFINE(xlate_actions_oversize);
 COVERAGE_DEFINE(xlate_actions_too_many_output);
@@ -2069,7 +2071,7 @@ group_first_live_bucket(const struct xlate_ctx *ctx,
 }
 
 static struct ofputil_bucket *
-group_best_live_bucket(const struct xlate_ctx *ctx,
+group_best_live_bucket(const struct xlate_ctx *ctx,         // 相关
                        const struct group_dpif *group,
                        uint32_t basis)
 {
@@ -2077,7 +2079,7 @@ group_best_live_bucket(const struct xlate_ctx *ctx,
     uint32_t best_score = 0;
 
     struct ofputil_bucket *bucket;
-    LIST_FOR_EACH (bucket, list_node, &group->up.buckets) {
+    LIST_FOR_EACH (bucket, list_node, &group->up.buckets) {                         // LIST_FOR_EACH 是一个宏，用于遍历链表
         if (bucket_is_alive(ctx, group, bucket, 0)) {
             uint32_t score =
                 (hash_int(bucket->bucket_id, basis) & 0xffff) * bucket->weight;
@@ -4844,6 +4846,40 @@ pick_dp_hash_select_group(struct xlate_ctx *ctx, struct group_dpif *group)
     }
 }
 
+// TODO
+static struct ofputil_bucket *
+pick_random_select_group(struct xlate_ctx *ctx, struct group_dpif *group)
+{
+    uint32_t weight_total = 0;
+    struct ofputil_bucket *bucket;
+    LIST_FOR_EACH (bucket, list_node, &group->up.buckets) {
+        if (bucket_is_alive(ctx, group, bucket, 0)) {
+            weight_total += (uint32_t)bucket->weight;
+        }
+    }
+
+    if (weight_total == 0) {
+        return NULL; // 没有可用的桶
+    }
+
+    random_init(); // 可选的初始化
+    uint32_t random_value = random_uint32() % weight_total; // 使用 random_uint32()  生成 0 到 weight_total-1 的随机数
+    uint32_t cumulative_weight = 0;
+
+    LIST_FOR_EACH (bucket, list_node, &group->up.buckets) {
+        if (bucket_is_alive(ctx, group, bucket, 0)) {
+            cumulative_weight += bucket->weight;
+            if (random_value < cumulative_weight) {
+                return bucket; // 选中当前桶
+            }
+        }
+    }
+
+    OVS_NOT_REACHED(); // 理论上不应该到达这里
+    return NULL;
+}
+
+
 static struct ofputil_bucket *
 pick_select_group(struct xlate_ctx *ctx, struct group_dpif *group)
 {
@@ -4865,9 +4901,12 @@ pick_select_group(struct xlate_ctx *ctx, struct group_dpif *group)
     case SEL_METHOD_DP_HASH:
         return pick_dp_hash_select_group(ctx, group);
         break;
+    case SEL_METHOD_RANDOM:
+        return pick_random_select_group(ctx, group);
+        break;
     default:
         /* Parsing of groups ensures this never happens */
-        OVS_NOT_REACHED();
+        OVS_NOT_REACHED();                                  // #define OVS_NOT_REACHED() abort()
     }
 
     return NULL;

@@ -31,6 +31,8 @@
 #include "openvswitch/vlog.h"
 #include "ox-stat.h"
 
+#include "openvswitch/ofp-prop.h"
+
 VLOG_DEFINE_THIS_MODULE(ofp_monitor);
 
 static struct vlog_rate_limit rl = VLOG_RATE_LIMIT_INIT(1, 5);
@@ -896,7 +898,8 @@ ofputil_decode_requestforward(const struct ofp_header *outer,
     } else {
         return OFPERR_OFPBFC_MSG_UNSUP;
     }
-
+    VLOG_WARN_RL(&rl, "ofputil_decode_requestforward return");
+    OFPPROP_LOG(&rl, false, "ofputil_decode_requestforward return");
     return 0;
 }
 
