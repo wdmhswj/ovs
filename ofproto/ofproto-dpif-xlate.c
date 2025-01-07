@@ -7346,6 +7346,7 @@ do_xlate_actions(const struct ofpact *ofpacts, size_t ofpacts_len,
             break;
 
         case OFPACT_CONTROLLER:
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPACT_CONTROLLER", __LINE__, __FILE__);
             controller = ofpact_get_CONTROLLER(a);
             if (controller->pause) {
                 ctx->pause = controller;
@@ -7362,6 +7363,7 @@ do_xlate_actions(const struct ofpact *ofpacts, size_t ofpacts_len,
             break;
 
         case OFPACT_ENQUEUE:
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPACT_ENQUEUE", __LINE__, __FILE__);
             memset(&wc->masks.skb_priority, 0xff,
                    sizeof wc->masks.skb_priority);
             xlate_enqueue_action(ctx, ofpact_get_ENQUEUE(a), last,
@@ -7369,6 +7371,7 @@ do_xlate_actions(const struct ofpact *ofpacts, size_t ofpacts_len,
             break;
 
         case OFPACT_SET_VLAN_VID:
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPACT_SET_VLAN_VID", __LINE__, __FILE__);
             wc->masks.vlans[0].tci |= htons(VLAN_VID_MASK | VLAN_CFI);
             if (flow->vlans[0].tci & htons(VLAN_CFI) ||
                 ofpact_get_SET_VLAN_VID(a)->push_vlan_if_needed) {
@@ -7383,6 +7386,7 @@ do_xlate_actions(const struct ofpact *ofpacts, size_t ofpacts_len,
             break;
 
         case OFPACT_SET_VLAN_PCP:
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPACT_SET_VLAN_PCP", __LINE__, __FILE__);
             wc->masks.vlans[0].tci |= htons(VLAN_PCP_MASK | VLAN_CFI);
             if (flow->vlans[0].tci & htons(VLAN_CFI) ||
                 ofpact_get_SET_VLAN_PCP(a)->push_vlan_if_needed) {
@@ -7397,26 +7401,31 @@ do_xlate_actions(const struct ofpact *ofpacts, size_t ofpacts_len,
             break;
 
         case OFPACT_STRIP_VLAN:
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPACT_STRIP_VLAN", __LINE__, __FILE__);
             flow_pop_vlan(flow, wc);
             break;
 
         case OFPACT_PUSH_VLAN:
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPACT_PUSH_VLAN", __LINE__, __FILE__);
             flow_push_vlan_uninit(flow, wc);
             flow->vlans[0].tpid = ofpact_get_PUSH_VLAN(a)->ethertype;
             flow->vlans[0].tci = htons(VLAN_CFI);
             break;
 
         case OFPACT_SET_ETH_SRC:
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPACT_SET_ETH_SRC", __LINE__, __FILE__);
             WC_MASK_FIELD(wc, dl_src);
             flow->dl_src = ofpact_get_SET_ETH_SRC(a)->mac;
             break;
 
         case OFPACT_SET_ETH_DST:
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPACT_SET_ETH_DST", __LINE__, __FILE__);
             WC_MASK_FIELD(wc, dl_dst);
             flow->dl_dst = ofpact_get_SET_ETH_DST(a)->mac;
             break;
 
         case OFPACT_SET_IPV4_SRC:
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPACT_SET_IPV4_SRC", __LINE__, __FILE__);
             if (flow->dl_type == htons(ETH_TYPE_IP)) {
                 memset(&wc->masks.nw_src, 0xff, sizeof wc->masks.nw_src);
                 WC_MASK_FIELD(wc, nw_proto);
@@ -7425,6 +7434,7 @@ do_xlate_actions(const struct ofpact *ofpacts, size_t ofpacts_len,
             break;
 
         case OFPACT_SET_IPV4_DST:
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPACT_SET_IPV4_DST", __LINE__, __FILE__);
             if (flow->dl_type == htons(ETH_TYPE_IP)) {
                 memset(&wc->masks.nw_dst, 0xff, sizeof wc->masks.nw_dst);
                 WC_MASK_FIELD(wc, nw_proto);
@@ -7433,6 +7443,7 @@ do_xlate_actions(const struct ofpact *ofpacts, size_t ofpacts_len,
             break;
 
         case OFPACT_SET_IP_DSCP:
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPACT_SET_IP_DSCP", __LINE__, __FILE__);
             if (is_ip_any(flow)) {
                 WC_MASK_FIELD(wc, nw_proto);
                 wc->masks.nw_tos |= IP_DSCP_MASK;
@@ -7442,6 +7453,7 @@ do_xlate_actions(const struct ofpact *ofpacts, size_t ofpacts_len,
             break;
 
         case OFPACT_SET_IP_ECN:
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPACT_SET_IP_ECN", __LINE__, __FILE__);
             if (is_ip_any(flow)) {
                 WC_MASK_FIELD(wc, nw_proto);
                 wc->masks.nw_tos |= IP_ECN_MASK;
@@ -7451,6 +7463,7 @@ do_xlate_actions(const struct ofpact *ofpacts, size_t ofpacts_len,
             break;
 
         case OFPACT_SET_IP_TTL:
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPACT_SET_IP_TTL", __LINE__, __FILE__);
             if (is_ip_any(flow)) {
                 WC_MASK_FIELD(wc, nw_proto);
                 wc->masks.nw_ttl = 0xff;
@@ -7459,6 +7472,7 @@ do_xlate_actions(const struct ofpact *ofpacts, size_t ofpacts_len,
             break;
 
         case OFPACT_SET_L4_SRC_PORT:
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPACT_SET_L4_SRC_PORT", __LINE__, __FILE__);
             if (is_ip_any(flow) && !(flow->nw_frag & FLOW_NW_FRAG_LATER)) {
                 memset(&wc->masks.nw_proto, 0xff, sizeof wc->masks.nw_proto);
                 memset(&wc->masks.tp_src, 0xff, sizeof wc->masks.tp_src);
@@ -7467,6 +7481,7 @@ do_xlate_actions(const struct ofpact *ofpacts, size_t ofpacts_len,
             break;
 
         case OFPACT_SET_L4_DST_PORT:
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPACT_SET_L4_DST_PORT", __LINE__, __FILE__);
             if (is_ip_any(flow) && !(flow->nw_frag & FLOW_NW_FRAG_LATER)) {
                 memset(&wc->masks.nw_proto, 0xff, sizeof wc->masks.nw_proto);
                 memset(&wc->masks.tp_dst, 0xff, sizeof wc->masks.tp_dst);
@@ -7482,25 +7497,30 @@ do_xlate_actions(const struct ofpact *ofpacts, size_t ofpacts_len,
          * resubmit to the frozen actions.
          */
         case OFPACT_RESUBMIT:
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPACT_RESUBMIT", __LINE__, __FILE__);
             xlate_ofpact_resubmit(ctx, ofpact_get_RESUBMIT(a), last);
             continue;
         case OFPACT_GOTO_TABLE:
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPACT_GOTO_TABLE", __LINE__, __FILE__);
             xlate_table_action(ctx, ctx->xin->flow.in_port.ofp_port,
                                ofpact_get_GOTO_TABLE(a)->table_id,
                                true, true, false, last, do_xlate_actions);
             continue;
 
         case OFPACT_SET_TUNNEL:
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPACT_SET_TUNNEL", __LINE__, __FILE__);
             flow->tunnel.tun_id = htonll(ofpact_get_SET_TUNNEL(a)->tun_id);
             break;
 
         case OFPACT_SET_QUEUE:
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPACT_SET_QUEUE", __LINE__, __FILE__);
             memset(&wc->masks.skb_priority, 0xff,
                    sizeof wc->masks.skb_priority);
             xlate_set_queue_action(ctx, ofpact_get_SET_QUEUE(a)->queue_id);
             break;
 
         case OFPACT_POP_QUEUE:
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPACT_POP_QUEUE", __LINE__, __FILE__);
             memset(&wc->masks.skb_priority, 0xff,
                    sizeof wc->masks.skb_priority);
             if (flow->skb_priority != ctx->orig_skb_priority) {
@@ -7511,10 +7531,12 @@ do_xlate_actions(const struct ofpact *ofpacts, size_t ofpacts_len,
             break;
 
         case OFPACT_REG_MOVE:
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPACT_REG_MOVE", __LINE__, __FILE__);
             xlate_ofpact_reg_move(ctx, ofpact_get_REG_MOVE(a));
             break;
 
         case OFPACT_SET_FIELD:
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPACT_SET_FIELD", __LINE__, __FILE__);
             set_field = ofpact_get_SET_FIELD(a);
             mf = set_field->field;
 
@@ -7534,48 +7556,58 @@ do_xlate_actions(const struct ofpact *ofpacts, size_t ofpacts_len,
             break;
 
         case OFPACT_STACK_PUSH:
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPACT_STACK_PUSH", __LINE__, __FILE__);
             nxm_execute_stack_push(ofpact_get_STACK_PUSH(a), flow, wc,
                                    &ctx->stack);
             break;
 
         case OFPACT_STACK_POP:
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPACT_STACK_POP", __LINE__, __FILE__);
             xlate_ofpact_stack_pop(ctx, ofpact_get_STACK_POP(a));
             break;
 
         case OFPACT_PUSH_MPLS:
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPACT_PUSH_MPLS", __LINE__, __FILE__);
             compose_mpls_push_action(ctx, ofpact_get_PUSH_MPLS(a));
             break;
 
         case OFPACT_POP_MPLS:
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPACT_POP_MPLS", __LINE__, __FILE__);
             compose_mpls_pop_action(ctx, ofpact_get_POP_MPLS(a)->ethertype);
             break;
 
         case OFPACT_SET_MPLS_LABEL:
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPACT_SET_MPLS_LABEL", __LINE__, __FILE__);
             compose_set_mpls_label_action(
                 ctx, ofpact_get_SET_MPLS_LABEL(a)->label);
             break;
 
         case OFPACT_SET_MPLS_TC:
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPACT_SET_MPLS_TC", __LINE__, __FILE__);
             compose_set_mpls_tc_action(ctx, ofpact_get_SET_MPLS_TC(a)->tc);
             break;
 
         case OFPACT_SET_MPLS_TTL:
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPACT_SET_MPLS_TTL", __LINE__, __FILE__);
             compose_set_mpls_ttl_action(ctx, ofpact_get_SET_MPLS_TTL(a)->ttl);
             break;
 
         case OFPACT_DEC_MPLS_TTL:
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPACT_DEC_MPLS_TTL", __LINE__, __FILE__);
             if (compose_dec_mpls_ttl_action(ctx)) {
                 return;
             }
             break;
 
         case OFPACT_DEC_NSH_TTL:
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPACT_DEC_NSH_TTL", __LINE__, __FILE__);
             if (compose_dec_nsh_ttl_action(ctx)) {
                 return;
             }
             break;
 
         case OFPACT_DEC_TTL:
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPACT_DEC_TTL", __LINE__, __FILE__);
             wc->masks.nw_ttl = 0xff;
             WC_MASK_FIELD(wc, nw_proto);
             if (compose_dec_ttl(ctx, ofpact_get_DEC_TTL(a))) {
@@ -7584,35 +7616,42 @@ do_xlate_actions(const struct ofpact *ofpacts, size_t ofpacts_len,
             break;
 
         case OFPACT_NOTE:
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPACT_NOTE", __LINE__, __FILE__);
             /* Nothing to do. */
             break;
 
         case OFPACT_MULTIPATH:
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPACT_MULTIPATH", __LINE__, __FILE__);
             multipath_execute(ofpact_get_MULTIPATH(a), flow, wc);
             xlate_report_subfield(ctx, &ofpact_get_MULTIPATH(a)->dst);
             break;
 
         case OFPACT_BUNDLE:
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPACT_BUNDLE", __LINE__, __FILE__);
             xlate_bundle_action(ctx, ofpact_get_BUNDLE(a), last,
                                 group_bucket_action);
             break;
 
         case OFPACT_OUTPUT_REG:
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPACT_OUTPUT_REG", __LINE__, __FILE__);
             xlate_output_reg_action(ctx, ofpact_get_OUTPUT_REG(a), last,
                     group_bucket_action);
             break;
 
         case OFPACT_OUTPUT_TRUNC:
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPACT_OUTPUT_TRUNC", __LINE__, __FILE__);
             xlate_output_trunc_action(ctx, ofpact_get_OUTPUT_TRUNC(a)->port,
                                 ofpact_get_OUTPUT_TRUNC(a)->max_len, last,
                                 group_bucket_action);
             break;
 
         case OFPACT_LEARN:
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPACT_LEARN", __LINE__, __FILE__);
             xlate_learn_action(ctx, ofpact_get_LEARN(a));
             break;
 
         case OFPACT_CONJUNCTION:
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPACT_CONJUNCTION", __LINE__, __FILE__);
             /* A flow with a "conjunction" action represents part of a special
              * kind of "set membership match".  Such a flow should not actually
              * get executed, but it could via, say, a "packet-out", even though
@@ -7621,23 +7660,28 @@ do_xlate_actions(const struct ofpact *ofpacts, size_t ofpacts_len,
             break;
 
         case OFPACT_EXIT:
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPACT_EXIT", __LINE__, __FILE__);
             ctx->exit = true;
             break;
 
         case OFPACT_UNROLL_XLATE:
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPACT_UNROLL_XLATE", __LINE__, __FILE__);
             xlate_ofpact_unroll_xlate(ctx, ofpact_get_UNROLL_XLATE(a));
             break;
 
         case OFPACT_FIN_TIMEOUT:
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPACT_FIN_TIMEOUT", __LINE__, __FILE__);
             memset(&wc->masks.nw_proto, 0xff, sizeof wc->masks.nw_proto);
             xlate_fin_timeout(ctx, ofpact_get_FIN_TIMEOUT(a));
             break;
 
         case OFPACT_DELETE_FIELD:
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPACT_DELETE_FIELD", __LINE__, __FILE__);
             xlate_delete_field(ctx, flow, ofpact_get_DELETE_FIELD(a));
             break;
 
         case OFPACT_CLEAR_ACTIONS:
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPACT_CLEAR_ACTIONS", __LINE__, __FILE__);
             xlate_report_action_set(ctx, "was");
             ofpbuf_clear(&ctx->action_set);
             ctx->xin->flow.actset_output = OFPP_UNSET;
@@ -7645,33 +7689,40 @@ do_xlate_actions(const struct ofpact *ofpacts, size_t ofpacts_len,
             break;
 
         case OFPACT_WRITE_ACTIONS:
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPACT_WRITE_ACTIONS", __LINE__, __FILE__);
             xlate_write_actions(ctx, ofpact_get_WRITE_ACTIONS(a));
             xlate_report_action_set(ctx, "is");
             break;
 
         case OFPACT_WRITE_METADATA:
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPACT_WRITE_METADATA", __LINE__, __FILE__);
             metadata = ofpact_get_WRITE_METADATA(a);
             flow->metadata &= ~metadata->mask;
             flow->metadata |= metadata->metadata & metadata->mask;
             break;
 
         case OFPACT_METER:
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPACT_METER", __LINE__, __FILE__);
             xlate_meter_action(ctx, ofpact_get_METER(a));
             break;
 
         case OFPACT_SAMPLE:
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPACT_SAMPLE", __LINE__, __FILE__);
             xlate_sample_action(ctx, ofpact_get_SAMPLE(a));
             break;
 
         case OFPACT_CLONE:
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPACT_CLONE", __LINE__, __FILE__);
             compose_clone(ctx, ofpact_get_CLONE(a), last);
             break;
 
         case OFPACT_ENCAP:
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPACT_ENCAP", __LINE__, __FILE__);
             xlate_generic_encap_action(ctx, ofpact_get_ENCAP(a));
             break;
 
         case OFPACT_DECAP: {
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPACT_DECAP", __LINE__, __FILE__);
             bool recirc_needed =
                     xlate_generic_decap_action(ctx, ofpact_get_DECAP(a));
             if (!ctx->error && recirc_needed) {
@@ -7684,30 +7735,36 @@ do_xlate_actions(const struct ofpact *ofpacts, size_t ofpacts_len,
         }
 
         case OFPACT_CT:
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPACT_CT", __LINE__, __FILE__);
             compose_conntrack_action(ctx, ofpact_get_CT(a), last);
             break;
 
         case OFPACT_CT_CLEAR:
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPACT_CT_CLEAR", __LINE__, __FILE__);
             if (ctx->conntracked) {
                 compose_ct_clear_action(ctx);
             }
             break;
 
         case OFPACT_NAT:
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPACT_NAT", __LINE__, __FILE__);
             /* This will be processed by compose_conntrack_action(). */
             ctx->ct_nat_action = ofpact_get_NAT(a);
             break;
 
         case OFPACT_DEBUG_RECIRC:
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPACT_DEBUG_RECIRC", __LINE__, __FILE__);
             ctx_trigger_freeze(ctx);
             a = ofpact_next(a);
             break;
 
         case OFPACT_DEBUG_SLOW:
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPACT_DEBUG_SLOW", __LINE__, __FILE__);
             ctx->xout->slow |= SLOW_ACTION;
             break;
 
         case OFPACT_CHECK_PKT_LARGER: {
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case OFPACT_CHECK_PKT_LARGER", __LINE__, __FILE__);
             const struct ofpact *remaining_acts = ofpact_next(a);
             size_t remaining_acts_len = ofpact_remaining_len(remaining_acts,
                                                              ofpacts,
