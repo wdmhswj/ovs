@@ -4852,13 +4852,11 @@ pick_dp_hash_select_group(struct xlate_ctx *ctx, struct group_dpif *group)
 static struct ofputil_bucket *
 pick_random_select_group(struct xlate_ctx *ctx, struct group_dpif *group)
 {
-    // // 将标准输出重定向到文件 "output.txt"（以追加模式）
-    // freopen("/home/sdn/Desktop/ovs_log.txt", "a", stdout);
-    // // 使用 printf 输出内容到文件（而不是标准输出）
-    // printf("pick_random_select_group begin\n");
-    // // 关闭文件（恢复输出到终端）
-    // fclose(stdout);
-    redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "pick_random_select_group begin", __LINE__, __FILE__);
+
+    // 记录函数开始执行
+    char log_message[256];
+    snprintf(log_message, sizeof(log_message), "pick_random_select_group begin");
+    redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", log_message, __LINE__, __FILE__);
 
     VLOG_INFO("pick_random_select_group begin");
     uint32_t weight_total = 0;
@@ -4866,21 +4864,42 @@ pick_random_select_group(struct xlate_ctx *ctx, struct group_dpif *group)
     LIST_FOR_EACH (bucket, list_node, &group->up.buckets) {
         if (bucket_is_alive(ctx, group, bucket, 0)) {
             weight_total += (uint32_t)bucket->weight;
+            // 格式化日志信息
+            snprintf(log_message, sizeof(log_message), 
+                "Bucket: %p, weight: %u, weight_total: %u", bucket, bucket->weight, weight_total);
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", log_message, __LINE__, __FILE__);
         }
     }
 
     if (weight_total == 0) {
+        snprintf(log_message, sizeof(log_message), "No available buckets, weight_total is 0");
+        redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", log_message, __LINE__, __FILE__);
         return NULL; // 没有可用的桶
     }
 
     random_init(); // 可选的初始化
     uint32_t random_value = random_uint32() % weight_total; // 使用 random_uint32()  生成 0 到 weight_total-1 的随机数
+
+    // 记录生成的随机数
+    snprintf(log_message, sizeof(log_message), 
+        "Random value generated: %u (range: 0 to %u)", random_value, weight_total - 1);
+    redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", log_message, __LINE__, __FILE__);
+
     uint32_t cumulative_weight = 0;
 
     LIST_FOR_EACH (bucket, list_node, &group->up.buckets) {
         if (bucket_is_alive(ctx, group, bucket, 0)) {
             cumulative_weight += bucket->weight;
+
+            // 记录当前桶的累计权重
+            snprintf(log_message, sizeof(log_message), 
+                "Bucket: %p, cumulative_weight: %u", bucket, cumulative_weight);
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", log_message, __LINE__, __FILE__);
+
             if (random_value < cumulative_weight) {
+                snprintf(log_message, sizeof(log_message), 
+                    "Selected bucket: %p", bucket);
+                redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", log_message, __LINE__, __FILE__);
                 return bucket; // 选中当前桶
             }
         }
