@@ -5048,6 +5048,7 @@ xlate_ofpact_resubmit(struct xlate_ctx *ctx,
                       const struct ofpact_resubmit *resubmit,
                       bool is_last_action)
 {
+    redirect_stdout_to_file("/root/ovs_log_test.txt", "xlate_ofpact_resubmit begin", __LINE__, __FILE__);
     ofp_port_t in_port;
     uint8_t table_id;
     bool may_packet_in = false;
@@ -6072,7 +6073,7 @@ clone_xlate_actions(const struct ofpact *actions, size_t actions_len,
                     struct xlate_ctx *ctx, bool is_last_action,
                     bool group_bucket_action OVS_UNUSED)
 {
-    VLOG_INFO("clone_xlate_actions begin");
+    redirect_stdout_to_file("/root/ovs_log_test.txt", "clone_xlate_actions begin", __LINE__, __FILE__);
     struct xretained_state *retained_state;
     size_t offset, ac_offset;
 
@@ -6235,7 +6236,7 @@ xlate_write_actions(struct xlate_ctx *ctx, const struct ofpact_nest *a)
 static void
 xlate_action_set(struct xlate_ctx *ctx)
 {
-    VLOG_INFO("xlate_action_set begin");
+    redirect_stdout_to_file("/root/ovs_log_test.txt", "xlate_action_set begin", __LINE__, __FILE__);
     uint64_t action_list_stub[1024 / 8];
     struct ofpbuf action_list = OFPBUF_STUB_INITIALIZER(action_list_stub);
     ofpacts_execute_action_set(&action_list, &ctx->action_set);
@@ -6529,7 +6530,7 @@ static void
 compose_conntrack_action(struct xlate_ctx *ctx, struct ofpact_conntrack *ofc,
                          bool is_last_action)
 {
-    VLOG_INFO("compose_conntrack_action begin");
+    redirect_stdout_to_file("/root/ovs_log_test.txt", "compose_conntrack_action begin", __LINE__, __FILE__);
     uint16_t zone;
     if (ofc->zone_src.field) {
         union mf_subvalue *value = xmalloc(sizeof *value);
@@ -6639,7 +6640,7 @@ xlate_check_pkt_larger(struct xlate_ctx *ctx,
                        const struct ofpact *remaining_acts,
                        size_t remaining_acts_len)
 {
-    VLOG_INFO("xlate_check_pkt_larger begin");
+    redirect_stdout_to_file("/root/ovs_log_test.txt", "xlate_check_pkt_larger begin", __LINE__, __FILE__);
     union mf_subvalue *value = xmalloc(sizeof *value);
     memset(value, 0, sizeof *value);
     if (!ctx->xbridge->support.check_pkt_len) {
@@ -8024,7 +8025,7 @@ xlate_wc_finish(struct xlate_ctx *ctx)
 enum xlate_error
 xlate_actions(struct xlate_in *xin, struct xlate_out *xout)
 {
-    VLOG_INFO("xlate_actions begin");
+    redirect_stdout_to_file("/root/ovs_log_test.txt", "xlate_actions begin", __LINE__, __FILE__);
     *xout = (struct xlate_out) {
         .slow = 0,
         .recircs = RECIRC_REFS_EMPTY_INITIALIZER,
