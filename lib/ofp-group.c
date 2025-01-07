@@ -1903,6 +1903,7 @@ ofputil_group_desc_format(struct ds *s, const struct ofp_header *oh,
         if (retval) {
             return retval != EOF ? retval : 0;
         }
+        OFPPROP_LOG(&rl, false, "ofputil_group_desc_format retval is null");
 
         ds_put_char(s, '\n');
         ds_put_char(s, ' ');

@@ -4680,6 +4680,7 @@ static void
 xlate_group_bucket(struct xlate_ctx *ctx, struct ofputil_bucket *bucket,
                    bool is_last_action)
 {
+    VLOG_INFO("xlate_group_bucket begin")
     struct ovs_list *old_trace = ctx->xin->trace;
     if (OVS_UNLIKELY(ctx->xin->trace)) {
         char *s = xasprintf("bucket %"PRIu32, bucket->bucket_id);
@@ -4850,6 +4851,7 @@ pick_dp_hash_select_group(struct xlate_ctx *ctx, struct group_dpif *group)
 static struct ofputil_bucket *
 pick_random_select_group(struct xlate_ctx *ctx, struct group_dpif *group)
 {
+    VLOG_INFO("pick_random_select_group begin")
     uint32_t weight_total = 0;
     struct ofputil_bucket *bucket;
     LIST_FOR_EACH (bucket, list_node, &group->up.buckets) {
@@ -4883,6 +4885,7 @@ pick_random_select_group(struct xlate_ctx *ctx, struct group_dpif *group)
 static struct ofputil_bucket *
 pick_select_group(struct xlate_ctx *ctx, struct group_dpif *group)
 {
+    VLOG_INFO("pick_select_group begin")
     /* Select groups may access flow keys beyond L2 in order to
      * select a bucket. Recirculate as appropriate to make this possible.
      */
@@ -4916,6 +4919,7 @@ static void
 xlate_group_action__(struct xlate_ctx *ctx, struct group_dpif *group,
                      bool is_last_action)
 {
+    VLOG_INFO("xlate_group_action__ begin")
     if (group->up.type == OFPGT11_ALL || group->up.type == OFPGT11_INDIRECT) {
         struct ovs_list *last_bucket = group->up.buckets.prev;
         struct ofputil_bucket *bucket;
@@ -4952,6 +4956,7 @@ static bool
 xlate_group_action(struct xlate_ctx *ctx, uint32_t group_id,
                    bool is_last_action)
 {
+    VLOG_INFO("xlate_group_action begin")
     if (xlate_resubmit_resource_check(ctx)) {
         struct group_dpif *group;
 
@@ -5982,6 +5987,7 @@ clone_xlate_actions(const struct ofpact *actions, size_t actions_len,
                     struct xlate_ctx *ctx, bool is_last_action,
                     bool group_bucket_action OVS_UNUSED)
 {
+    VLOG_INFO("clone_xlate_actions begin")
     struct xretained_state *retained_state;
     size_t offset, ac_offset;
 
@@ -6144,6 +6150,7 @@ xlate_write_actions(struct xlate_ctx *ctx, const struct ofpact_nest *a)
 static void
 xlate_action_set(struct xlate_ctx *ctx)
 {
+    VLOG_INFO("xlate_action_set begin")
     uint64_t action_list_stub[1024 / 8];
     struct ofpbuf action_list = OFPBUF_STUB_INITIALIZER(action_list_stub);
     ofpacts_execute_action_set(&action_list, &ctx->action_set);
@@ -6437,6 +6444,7 @@ static void
 compose_conntrack_action(struct xlate_ctx *ctx, struct ofpact_conntrack *ofc,
                          bool is_last_action)
 {
+    VLOG_INFO("compose_conntrack_action begin")
     uint16_t zone;
     if (ofc->zone_src.field) {
         union mf_subvalue *value = xmalloc(sizeof *value);
@@ -6546,6 +6554,7 @@ xlate_check_pkt_larger(struct xlate_ctx *ctx,
                        const struct ofpact *remaining_acts,
                        size_t remaining_acts_len)
 {
+    VLOG_INFO("xlate_check_pkt_larger begin")
     union mf_subvalue *value = xmalloc(sizeof *value);
     memset(value, 0, sizeof *value);
     if (!ctx->xbridge->support.check_pkt_len) {
@@ -7184,6 +7193,7 @@ do_xlate_actions(const struct ofpact *ofpacts, size_t ofpacts_len,
                  struct xlate_ctx *ctx, bool is_last_action,
                  bool group_bucket_action)
 {
+    VLOG_INFO("do_xlate_actions begin")
     struct flow_wildcards *wc = ctx->wc;
     struct flow *flow = &ctx->xin->flow;
     const struct ofpact *a;
@@ -7927,6 +7937,7 @@ xlate_wc_finish(struct xlate_ctx *ctx)
 enum xlate_error
 xlate_actions(struct xlate_in *xin, struct xlate_out *xout)
 {
+    VLOG_INFO("xlate_actions begin")
     *xout = (struct xlate_out) {
         .slow = 0,
         .recircs = RECIRC_REFS_EMPTY_INITIALIZER,
