@@ -3044,6 +3044,9 @@ static void
 bundle_group_mod__(const char *remote, struct ofputil_group_mod *gms,
                    size_t n_gms, enum ofputil_protocol usable_protocols)
 {
+    OFPPROP_LOG(&rl, false, "bundle_group_mod__ begin");
+    VLOG_WARN_RL(&rl, "bundle_group_mod__ begin");
+    VLOG_WARN("bundle_group_mod__ begin");
     enum ofputil_protocol protocol;
     enum ofp_version version;
     struct vconn *vconn;
@@ -3075,6 +3078,9 @@ static void
 ofctl_group_mod__(const char *remote, struct ofputil_group_mod *gms,
                   size_t n_gms, enum ofputil_protocol usable_protocols)
 {
+    OFPPROP_LOG(&rl, false, "ofctl_group_mod__ begin");
+    VLOG_WARN_RL(&rl, "ofctl_group_mod__ begin");
+    VLOG_WARN("ofctl_group_mod__ begin");
     enum ofputil_protocol protocol;
     struct ofputil_group_mod *gm;
     enum ofp_version version;
@@ -4195,6 +4201,10 @@ ofctl_parse_flows(struct ovs_cmdl_context *ctx)
 static void
 ofctl_parse_group(struct ovs_cmdl_context *ctx)
 {
+    OFPPROP_LOG(&rl, false, "ofctl_parse_group begin");
+    VLOG_WARN_RL(&rl, "ofctl_parse_group begin");
+    VLOG_WARN("ofctl_parse_group begin");
+    
     enum ofputil_protocol usable_protocols;
     struct ofputil_group_mod gm;
     char *error = parse_ofp_group_mod_str(&gm, OFPGC11_ADD, ctx->argv[1], NULL,
