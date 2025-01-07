@@ -4701,7 +4701,6 @@ xlate_group_bucket(struct xlate_ctx *ctx, struct ofputil_bucket *bucket,
                                                         bucket->ofpacts_len);
 
     // 打印即将执行的动作
-    // snprintf(log_message, sizeof(log_message), "Executing %zu actions in bucket %"PRIu32, action_set.size, bucket->bucket_id);
     snprintf(log_message, sizeof(log_message), "Executing %u actions in bucket %"PRIu32, (unsigned int)action_set.size, bucket->bucket_id);
     redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", log_message, __LINE__, __FILE__);
 
