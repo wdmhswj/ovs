@@ -14,17 +14,17 @@ void log_to_file(const char *filename, int line_number, const char *format, ...)
 
     // 获取当前时间
     time_t rawtime;
-    struct tm *timeinfo;
-    char time_str[20]; // 用于存储时间字符串
+    struct tm timeinfo;  // 使用一个本地的结构体来存储时间
     time(&rawtime);
-    timeinfo = localtime(&rawtime);
-    strftime(time_str, sizeof(time_str), "%Y-%m-%d %H:%M:%S", timeinfo);
+    localtime_r(&rawtime, &timeinfo);  // 使用线程安全的 localtime_r
 
     // 获取当前文件名
     const char *file_name = __FILE__;
 
     // 打印时间、文件名、行号到文件
-    fprintf(file, "[%s] %s:%d - ", time_str, file_name, line_number);
+    fprintf(file, "[%04d-%02d-%02d %02d:%02d:%02d] %s:%d - ", 
+            timeinfo.tm_year + 1900, timeinfo.tm_mon + 1, timeinfo.tm_mday,
+            timeinfo.tm_hour, timeinfo.tm_min, timeinfo.tm_sec, file_name, line_number);
 
     // 使用变参打印用户提供的信息
     va_list args;
