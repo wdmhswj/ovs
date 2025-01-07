@@ -4854,11 +4854,11 @@ pick_random_select_group(struct xlate_ctx *ctx, struct group_dpif *group)
 {
 
     // 记录函数开始执行
-    char log_message[256];
+    char log_message[1024];
     snprintf(log_message, sizeof(log_message), "pick_random_select_group begin");
     redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", log_message, __LINE__, __FILE__);
 
-    VLOG_INFO("pick_random_select_group begin");
+    
     uint32_t weight_total = 0;
     struct ofputil_bucket *bucket;
     LIST_FOR_EACH (bucket, list_node, &group->up.buckets) {
@@ -4885,6 +4885,7 @@ pick_random_select_group(struct xlate_ctx *ctx, struct group_dpif *group)
         "Random value generated: %u (range: 0 to %u)", random_value, weight_total - 1);
     redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", log_message, __LINE__, __FILE__);
 
+    redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "testtest", __LINE__, __FILE__);
     uint32_t cumulative_weight = 0;
 
     LIST_FOR_EACH (bucket, list_node, &group->up.buckets) {
