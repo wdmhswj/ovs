@@ -5302,6 +5302,7 @@ finish_freezing__(struct xlate_ctx *ctx, uint8_t table)
 static void
 finish_freezing(struct xlate_ctx *ctx)
 {
+    redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "finish_freezing begin", __LINE__, __FILE__);
     xlate_commit_actions(ctx);
     finish_freezing__(ctx, 0);
 }
@@ -5566,6 +5567,9 @@ xlate_output_action(struct xlate_ctx *ctx, ofp_port_t port,
         redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "case default", __LINE__, __FILE__);
         if (port != ctx->xin->flow.in_port.ofp_port) {
             redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "port != in_port", __LINE__, __FILE__);
+            char log_message[256];
+            snprintf(log_message, sizeof(log_message), "port: %" PRIu32 ", in_port: %" PRIu32, port, ctx->xin->flow.in_port.ofp_port);
+            redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", log_message, __LINE__, __FILE__);
             compose_output_action(ctx, port, NULL, is_last_action, truncate);
         } else {
             redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "port == in_port", __LINE__, __FILE__);
@@ -5574,7 +5578,7 @@ xlate_output_action(struct xlate_ctx *ctx, ofp_port_t port,
         break;
     }
 
-    redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "other cases", __LINE__, __FILE__);
+    // redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", "other cases", __LINE__, __FILE__);
     if (prev_nf_output_iface == NF_OUT_FLOOD) {
         ctx->nf_output_iface = NF_OUT_FLOOD;
     } else if (ctx->nf_output_iface == NF_OUT_DROP) {
