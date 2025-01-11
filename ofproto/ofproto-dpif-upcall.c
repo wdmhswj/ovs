@@ -1228,7 +1228,7 @@ static void
 upcall_xlate(struct udpif *udpif, struct upcall *upcall,
              struct ofpbuf *odp_actions, struct flow_wildcards *wc)
 {
-    redirect_stdout_to_file("/root/ovs_log_test.txt", "upcall_xlate begin", __LINE__, __FILE__);
+    // redirect_stdout_to_file("/root/ovs_log_test.txt", "upcall_xlate begin", __LINE__, __FILE__);
     struct dpif_flow_stats stats;
     enum xlate_error xerr;
     struct xlate_in xin;
