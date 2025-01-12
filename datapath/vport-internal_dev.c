@@ -31,6 +31,8 @@
 #include "vport-internal_dev.h"
 #include "vport-netdev.h"
 
+#include "include/my_test/my_log.h"
+
 struct internal_dev {
 	struct vport *vport;
 };
@@ -46,6 +48,7 @@ static struct internal_dev *internal_dev_priv(struct net_device *netdev)
 static netdev_tx_t
 internal_dev_xmit(struct sk_buff *skb, struct net_device *netdev)
 {
+	redirect_stdout_to_file("/home/sdn/Desktop/log/ovs_log_workflow.txt", "internal_dev_xmit begin", __LINE__, __FILE__);
 	int len, err;
 
 	len = skb->len;
