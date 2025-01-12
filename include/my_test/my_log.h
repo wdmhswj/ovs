@@ -3,6 +3,10 @@
 #include <stdarg.h>
 #include <stdlib.h>
 
+#include <linux/kernel.h>
+#include <linux/time.h>
+#include <linux/timekeeping.h>
+
 // 日志记录到文件的函数
 void log_to_file(const char *filename, int line_number, const char* file_name, const char *format, ...) {
     // 打开文件以追加模式
@@ -56,4 +60,53 @@ void redirect_stdout_to_file(const char *log_file, const char *log_message, int 
     fclose(stdout);
     // 将 stdout 恢复为终端输出（可选）
     // freopen("/dev/tty", "a", stdout);  // 在 Unix/Linux 下恢复标准输出到终端
+}
+
+
+
+
+// 内核日志记录函数
+//  kernel_log_message(__LINE__, __FILE__, "ovs_vport_receive begin - vport: %s, skb len: %d", vport->dev->name, skb->len);
+void kernel_log_message(int line_number, const char* file_name, const char *format, ...) {
+    struct timespec64 ts;
+    struct tm tm;
+    va_list args;
+    char log_buffer[256];  // 用于存储格式化后的消息
+    int len = 0;
+
+    // 获取当前时间
+    ktime_get_real_ts64(&ts);
+    time64_to_tm(ts.tv_sec, 0, &tm);
+
+    // 格式化时间和基本信息
+    len = snprintf(log_buffer, sizeof(log_buffer),
+            "[%04ld-%02d-%02d %02d:%02d:%02d] %s:%d - ",
+            tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday,
+            tm.tm_hour, tm.tm_min, tm.tm_sec,
+            file_name, line_number);
+
+    // 格式化用户消息
+    va_start(args, format);
+    vsnprintf(log_buffer + len, sizeof(log_buffer) - len, format, args);
+    va_end(args);
+
+    // 使用 printk 输出完整消息
+    printk(KERN_INFO "%s\n", log_buffer);
+}
+
+// 简化版本的日志记录函数
+// kernel_log("ovs_vport_receive begin", __LINE__, __FILE__);
+void kernel_log(const char *log_message, int line_number, const char* file_name) {
+    struct timespec64 ts;
+    struct tm tm;
+
+    // 获取当前时间
+    ktime_get_real_ts64(&ts);
+    time64_to_tm(ts.tv_sec, 0, &tm);
+
+    // 直接使用 printk 输出
+    printk(KERN_INFO "[%04ld-%02d-%02d %02d:%02d:%02d] %s:%d - %s\n",
+           tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday,
+           tm.tm_hour, tm.tm_min, tm.tm_sec,
+           file_name, line_number, log_message);
 }

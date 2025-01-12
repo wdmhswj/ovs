@@ -235,7 +235,8 @@ void ovs_dp_detach_port(struct vport *p)
 /* Must be called with rcu_read_lock. */
 void ovs_dp_process_packet(struct sk_buff *skb, struct sw_flow_key *key)	// 处理通过 OVS 数据路径的每个数据包。它主要负责查找与数据包匹配的流表项（flow），执行相关的动作（actions），并更新数据平面的统计信息。
 {
-	redirect_stdout_to_file("/home/sdn/Desktop/log/ovs_log_workflow.txt", "ovs_dp_process_packet begin", __LINE__, __FILE__);
+	// redirect_stdout_to_file("/home/sdn/Desktop/log/ovs_log_workflow.txt", "ovs_dp_process_packet begin", __LINE__, __FILE__);
+	kernel_log("ovs_dp_process_packet begin", __LINE__, __FILE__);
 	const struct vport *p = OVS_CB(skb)->input_vport;
 	struct datapath *dp = p->dp;
 	struct sw_flow *flow;
@@ -288,7 +289,8 @@ int ovs_dp_upcall(struct datapath *dp, struct sk_buff *skb,
 		  const struct dp_upcall_info *upcall_info,
 		  uint32_t cutlen)
 {
-	redirect_stdout_to_file("/home/sdn/Desktop/log/ovs_log_workflow.txt", "ovs_dp_upcall begin", __LINE__, __FILE__);
+	// redirect_stdout_to_file("/home/sdn/Desktop/log/ovs_log_workflow.txt", "ovs_dp_upcall begin", __LINE__, __FILE__);
+	kernel_log("ovs_dp_upcall begin", __LINE__, __FILE__);
 	struct dp_stats_percpu *stats;
 	int err;
 
