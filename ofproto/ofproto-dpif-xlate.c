@@ -8074,7 +8074,7 @@ xlate_wc_finish(struct xlate_ctx *ctx)
 enum xlate_error
 xlate_actions(struct xlate_in *xin, struct xlate_out *xout)
 {
-    redirect_stdout_to_file("/home/sdn/Desktop/log/ovs_log_workflow.txt", "xlate_actions begin", __LINE__, __FILE__);
+    // redirect_stdout_to_file("/home/sdn/Desktop/log/ovs_log_workflow.txt", "xlate_actions begin", __LINE__, __FILE__);
     *xout = (struct xlate_out) {
         .slow = 0,
         .recircs = RECIRC_REFS_EMPTY_INITIALIZER,
