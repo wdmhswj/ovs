@@ -76,7 +76,7 @@ error:
 static rx_handler_result_t netdev_frame_hook(struct sk_buff **pskb)
 {
 	// redirect_stdout_to_file("/home/sdn/Desktop/log/ovs_log_workflow.txt", "netdev_frame_hook begin", __LINE__, __FILE__);
-	kernel_log("rx_handler_result_t begin", __LINE__, __FILE__);
+	// kernel_log("rx_handler_result_t begin", __LINE__, __FILE__);
 	struct sk_buff *skb = *pskb;
 
 	if (unlikely(skb->pkt_type == PACKET_LOOPBACK))

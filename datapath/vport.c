@@ -580,7 +580,7 @@ static int packet_length(const struct sk_buff *skb,
 void ovs_vport_send(struct vport *vport, struct sk_buff *skb, u8 mac_proto)
 {
 	// redirect_stdout_to_file("/home/sdn/Desktop/log/ovs_log_workflow.txt", "ovs_vport_send begin", __LINE__, __FILE__);
-	kernel_log("ovs_vport_send begin", __LINE__, __FILE__);
+	// kernel_log("ovs_vport_send begin", __LINE__, __FILE__);
 	int mtu = vport->dev->mtu;
 
 	switch (vport->dev->type) {

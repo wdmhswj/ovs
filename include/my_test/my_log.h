@@ -95,8 +95,6 @@ void kernel_log_message(int line_number, const char* file_name, const char *form
     // 使用 syslog 记录日志
     syslog(LOG_INFO, "%s", log_buffer);
     
-    // 同时也打印到标准错误输出
-    fprintf(stderr, "%s\n", log_buffer);
 }
 
 // 简化版本的日志记录函数
@@ -121,6 +119,4 @@ void kernel_log(const char *log_message, int line_number, const char* file_name)
     // 使用 syslog 记录日志
     syslog(LOG_INFO, "%s", log_buffer);
     
-    // 同时也打印到标准错误输出
-    fprintf(stderr, "%s\n", log_buffer);
 }
