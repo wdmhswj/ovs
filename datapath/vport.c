@@ -41,6 +41,8 @@
 #include "vport.h"
 #include "vport-internal_dev.h"
 
+#include "include/my_test/my_log.h"
+
 static LIST_HEAD(vport_ops_list);
 static bool compat_gre_loaded = false;
 static bool compat_ip6_tunnel_loaded = false;
@@ -529,6 +531,7 @@ u32 ovs_vport_find_upcall_portid(const struct vport *vport, struct sk_buff *skb)
 int ovs_vport_receive(struct vport *vport, struct sk_buff *skb,
 		      const struct ip_tunnel_info *tun_info)
 {
+	redirect_stdout_to_file("/home/sdn/Desktop/log/ovs_log_workflow.txt", "ovs_vport_receive begin", __LINE__, __FILE__);
 	struct sw_flow_key key;
 	int error;
 
@@ -575,6 +578,7 @@ static int packet_length(const struct sk_buff *skb,
 
 void ovs_vport_send(struct vport *vport, struct sk_buff *skb, u8 mac_proto)
 {
+	redirect_stdout_to_file("/home/sdn/Desktop/log/ovs_log_workflow.txt", "ovs_vport_send begin", __LINE__, __FILE__);
 	int mtu = vport->dev->mtu;
 
 	switch (vport->dev->type) {
