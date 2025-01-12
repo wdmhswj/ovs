@@ -2,11 +2,10 @@
 #include <time.h>
 #include <stdarg.h>
 #include <stdlib.h>
+#include <syslog.h>
 
-#include <linux/kernel.h>
-#include <linux/version.h>
-// #include <linux/time.h>
-// #include <linux/timekeeping.h>
+// #include <linux/kernel.h>
+
 
 // 日志记录到文件的函数
 void log_to_file(const char *filename, int line_number, const char* file_name, const char *format, ...) {
@@ -93,8 +92,11 @@ void kernel_log_message(int line_number, const char* file_name, const char *form
     vsnprintf(log_buffer + len, sizeof(log_buffer) - len, format, args);
     va_end(args);
 
-    // 使用 printk 输出完整消息
-    printk(KERN_INFO "%s\n", log_buffer);
+    // 使用 syslog 记录日志
+    syslog(LOG_INFO, "%s", log_buffer);
+    
+    // 同时也打印到标准错误输出
+    fprintf(stderr, "%s\n", log_buffer);
 }
 
 // 简化版本的日志记录函数
@@ -116,6 +118,9 @@ void kernel_log(const char *log_message, int line_number, const char* file_name)
             tm_info.tm_hour, tm_info.tm_min, tm_info.tm_sec,
             file_name, line_number, log_message);
 
-    // 直接使用 printk 输出
-    printk(KERN_INFO "%s\n", log_buffer);
+    // 使用 syslog 记录日志
+    syslog(LOG_INFO, "%s", log_buffer);
+    
+    // 同时也打印到标准错误输出
+    fprintf(stderr, "%s\n", log_buffer);
 }
