@@ -4,6 +4,7 @@
 #include <stdlib.h>
 
 #include <linux/kernel.h>
+#include <linux/version.h>
 // #include <linux/time.h>
 // #include <linux/timekeeping.h>
 
