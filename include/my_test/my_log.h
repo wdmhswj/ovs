@@ -68,21 +68,23 @@ void redirect_stdout_to_file(const char *log_file, const char *log_message, int 
 // 内核日志记录函数
 //  kernel_log_message(__LINE__, __FILE__, "ovs_vport_receive begin - vport: %s, skb len: %d", vport->dev->name, skb->len);
 void kernel_log_message(int line_number, const char* file_name, const char *format, ...) {
-    struct timespec64 ts;
-    struct tm tm;
+    
+    time_t now;
+    struct tm tm_info;
+    char time_buf[26];
+    char log_buffer[512];  // 用于存储格式化后的消息
     va_list args;
-    char log_buffer[256];  // 用于存储格式化后的消息
-    int len = 0;
+    int len;
 
     // 获取当前时间
-    ktime_get_real_ts64(&ts);
-    time64_to_tm(ts.tv_sec, 0, &tm);
-
+    time(&now);
+    localtime_r(&now, &tm_info);
+    
     // 格式化时间和基本信息
     len = snprintf(log_buffer, sizeof(log_buffer),
-            "[%04ld-%02d-%02d %02d:%02d:%02d] %s:%d - ",
-            tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday,
-            tm.tm_hour, tm.tm_min, tm.tm_sec,
+            "[%04d-%02d-%02d %02d:%02d:%02d] %s:%d - ",
+            tm_info.tm_year + 1900, tm_info.tm_mon + 1, tm_info.tm_mday,
+            tm_info.tm_hour, tm_info.tm_min, tm_info.tm_sec,
             file_name, line_number);
 
     // 格式化用户消息
@@ -97,16 +99,22 @@ void kernel_log_message(int line_number, const char* file_name, const char *form
 // 简化版本的日志记录函数
 // kernel_log("ovs_vport_receive begin", __LINE__, __FILE__);
 void kernel_log(const char *log_message, int line_number, const char* file_name) {
-    struct timespec64 ts;
-    struct tm tm;
+    time_t now;
+    struct tm tm_info;
+    char time_buf[26];
+    char log_buffer[512];
 
     // 获取当前时间
-    ktime_get_real_ts64(&ts);
-    time64_to_tm(ts.tv_sec, 0, &tm);
+    time(&now);
+    localtime_r(&now, &tm_info);
+    
+    // 格式化完整消息
+    snprintf(log_buffer, sizeof(log_buffer),
+            "[%04d-%02d-%02d %02d:%02d:%02d] %s:%d - %s",
+            tm_info.tm_year + 1900, tm_info.tm_mon + 1, tm_info.tm_mday,
+            tm_info.tm_hour, tm_info.tm_min, tm_info.tm_sec,
+            file_name, line_number, log_message);
 
     // 直接使用 printk 输出
-    printk(KERN_INFO "[%04ld-%02d-%02d %02d:%02d:%02d] %s:%d - %s\n",
-           tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday,
-           tm.tm_hour, tm.tm_min, tm.tm_sec,
-           file_name, line_number, log_message);
+    printk(KERN_INFO "%s\n", log_buffer);
 }
