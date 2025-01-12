@@ -4870,7 +4870,7 @@ pick_random_select_group(struct xlate_ctx *ctx, struct group_dpif *group)
     // 记录函数开始执行
     char log_message[1024];
     snprintf(log_message, sizeof(log_message), "pick_random_select_group begin");
-    redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", log_message, __LINE__, __FILE__);
+    redirect_stdout_to_file("/home/sdn/Desktop/log/ovs_log_workflow.txt", log_message, __LINE__, __FILE__);
 
     
     uint32_t weight_total = 0;

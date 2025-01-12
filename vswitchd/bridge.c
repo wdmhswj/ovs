@@ -3264,7 +3264,7 @@ bridge_run(void)
 
     ovsrec_open_vswitch_init(&null_cfg);
 
-    ovsdb_idl_run(idl);
+    ovsdb_idl_run(idl);                                                     // 运行数据库
 
     if_notifier_run();
 
@@ -3302,7 +3302,7 @@ bridge_run(void)
      * it must be done after the configuration is set.  If the
      * initialization has already occurred, bridge_init_ofproto()
      * returns immediately. */
-    bridge_init_ofproto(cfg);
+    bridge_init_ofproto(cfg);                                               // ofproto 初始化
 
     /* Once the value of flow-restore-wait is false, we no longer should
      * check its value from the database. */
@@ -3332,7 +3332,7 @@ bridge_run(void)
 
         idl_seqno = ovsdb_idl_get_seqno(idl);
         txn = ovsdb_idl_txn_create(idl);
-        bridge_reconfigure(cfg ? cfg : &null_cfg);
+        bridge_reconfigure(cfg ? cfg : &null_cfg);                      // 同步ovsdb的cfg配置，如网桥创建、端口添加、控制器连接等
 
         if (cfg) {
             ovsrec_open_vswitch_set_cur_cfg(cfg, cfg->next_cfg);

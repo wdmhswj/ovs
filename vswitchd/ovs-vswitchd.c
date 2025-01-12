@@ -89,7 +89,7 @@ main(int argc, char *argv[])
     remote = parse_options(argc, argv, &unixctl_path);
     fatal_ignore_sigpipe();
 
-    daemonize_start(true);
+    daemonize_start(true);                                              // 开始守护进程模式
 
     if (want_mlockall) {
 #ifdef HAVE_MLOCKALL
@@ -110,7 +110,7 @@ main(int argc, char *argv[])
     unixctl_command_register("exit", "[--cleanup]", 0, 1,
                              ovs_vswitchd_exit, NULL);
 
-    bridge_init(remote);
+    bridge_init(remote);                                                // 初始化桥模型和数据库idl
     free(remote);
 
     while (!exit_args.exiting) {
@@ -124,19 +124,19 @@ main(int argc, char *argv[])
             memory_report(&usage);
             simap_destroy(&usage);
         }
-        bridge_run();
-        unixctl_server_run(unixctl);
-        netdev_run();
+        bridge_run();                                                   // 处理 controller 命令和 ovs-ofctl 命令
+        unixctl_server_run(unixctl);                                    // 从 unixctl 指定的 server 获取 ovs-appctl 发送的命令并执行
+        netdev_run();                                                   // 初始化数据库中的虚拟网卡
 
         memory_wait();
         bridge_wait();
         unixctl_server_wait(unixctl);
-        netdev_wait();
+        netdev_wait();                                                  // fd 加入 poll 的监听节点中
         if (exit_args.exiting) {
             poll_immediate_wake();
         }
         OVS_USDT_PROBE(main, poll_block);
-        poll_block();
+        poll_block();                                                   // 阻塞直到被 poll_fd_wait() 注册的事件发生或超时
         if (should_service_stop()) {
             exit_args.exiting = true;
         }
