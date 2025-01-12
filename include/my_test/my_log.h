@@ -4,8 +4,8 @@
 #include <stdlib.h>
 
 #include <linux/kernel.h>
-#include <linux/time.h>
-#include <linux/timekeeping.h>
+// #include <linux/time.h>
+// #include <linux/timekeeping.h>
 
 // 日志记录到文件的函数
 void log_to_file(const char *filename, int line_number, const char* file_name, const char *format, ...) {
