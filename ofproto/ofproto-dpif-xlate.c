@@ -4938,6 +4938,8 @@ pick_select_group(struct xlate_ctx *ctx, struct group_dpif *group)
         return NULL;
     }
 
+    return pick_random_select_group(ctx, group);                // 直接默认就使用自定义的 random 方法
+
     switch (group->selection_method) {
     case SEL_METHOD_DEFAULT:
         return pick_default_select_group(ctx, group);
