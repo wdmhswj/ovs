@@ -4911,6 +4911,12 @@ pick_ff_group(struct xlate_ctx *ctx, struct group_dpif *group)
 static struct ofputil_bucket *
 pick_default_select_group(struct xlate_ctx *ctx, struct group_dpif *group)
 {
+    // 记录函数开始执行
+    char log_message[1024];
+    snprintf(log_message, sizeof(log_message), "pick_default_select_group begin");
+    // redirect_stdout_to_file("/home/osboxes/Desktop/ovs_log.txt", log_message, __LINE__, __FILE__);
+    redirect_stdout_to_file("/home/osboxes/Desktop/log/ovs_log_workflow_default.txt", log_message, __LINE__, __FILE__);
+
     flow_mask_hash_fields(&ctx->xin->flow, ctx->wc,
                           NX_HASH_FIELDS_SYMMETRIC_L4);
     return group_best_live_bucket(ctx, group,
