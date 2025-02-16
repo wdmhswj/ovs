@@ -5030,7 +5030,7 @@ pick_random_select_group(struct xlate_ctx *ctx, struct group_dpif *group)
     // srand((unsigned int)time(NULL));
     // random_init(); // 可选的初始化
     uint32_t random_value = random_uint32() % weight_total; // 使用 random_uint32()  生成 0 到 weight_total-1 的随机数
-    // uint32_t random_value = rand() % weight_total;
+
 
     // 记录生成的随机数
     snprintf(log_message, sizeof(log_message), 
@@ -5054,7 +5054,7 @@ pick_random_select_group(struct xlate_ctx *ctx, struct group_dpif *group)
 
             if (random_value < cumulative_weight) {
                 // return bucket; // 选中当前桶
-                
+
                 snprintf(log_message, sizeof(log_message), 
                     "Selected bucket: %p", bucket);
                 // redirect_stdout_to_file("/home/sdn/Desktop/ovs_log.txt", log_message, __LINE__, __FILE__);
