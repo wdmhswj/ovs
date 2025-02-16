@@ -5023,7 +5023,8 @@ pick_random_select_group(struct xlate_ctx *ctx, struct group_dpif *group)
     // redirect_stdout_to_file("/home/osboxes/Desktop/ovs_log.txt", log_message, __LINE__, __FILE__);
     redirect_stdout_to_file("/home/osboxes/Desktop/log/ovs_log_workflow_default.txt", log_message, __LINE__, __FILE__);
 
-    
+    uint32_t dp_hash = ctx->xin->flow.dp_hash;
+
     uint32_t weight_total = 0;
     struct ofputil_bucket *bucket;
     LIST_FOR_EACH (bucket, list_node, &group->up.buckets) {
@@ -5186,7 +5187,7 @@ pick_select_group(struct xlate_ctx *ctx, struct group_dpif *group)  // 可能相
         return pick_dp_hash_select_group(ctx, group);
         break;
     case SEL_METHOD_RANDOM:
-        return pick_random_select_group_2(ctx, group);
+        return pick_random_select_group(ctx, group);
         break;
     default:
         /* Parsing of groups ensures this never happens */
