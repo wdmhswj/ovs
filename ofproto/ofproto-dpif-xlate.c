@@ -5098,7 +5098,65 @@ pick_random_select_group_1(struct xlate_ctx *ctx, struct group_dpif *group)
                 flow_hash_symmetric_l4(&ctx->xin->flow, 0));
 }
 
+static struct ofputil_bucket *
+pick_random_select_group_2(struct xlate_ctx *ctx, struct group_dpif *group)
+{
+    char log_message[1024];
+    snprintf(log_message, sizeof(log_message), "pick_random_select_group_2 begin");
+    redirect_stdout_to_file("/home/osboxes/Desktop/log/ovs_log_workflow_default.txt", 
+                           log_message, __LINE__, __FILE__);
 
+    // 计算总权重
+    uint32_t weight_total = 0;
+    struct ofputil_bucket *bucket;
+    LIST_FOR_EACH (bucket, list_node, &group->up.buckets) {
+        if (bucket_is_alive(ctx, group, bucket, 0)) {
+            weight_total += (uint32_t)bucket->weight;
+        } else {
+            xlate_report_bucket_not_live(ctx, bucket);
+        }
+    }
+
+    if (weight_total == 0) {
+        return NULL;
+    }
+
+    // 使用流的特征作为随机数种子
+    const struct flow *flow = &ctx->xin->flow;
+    uint32_t hash_basis = 0;
+    
+    // 组合多个字段生成哈希值
+    hash_basis = hash_add(hash_basis, flow->nw_src);
+    hash_basis = hash_add(hash_basis, flow->nw_dst);
+    hash_basis = hash_add(hash_basis, flow->tp_src);
+    hash_basis = hash_add(hash_basis, flow->tp_dst);
+    hash_basis = hash_add(hash_basis, flow->nw_proto);
+    
+    // 使用哈希值选择bucket
+    uint32_t bucket_index = hash_basis % weight_total;
+    uint32_t cumulative_weight = 0;
+    struct ofputil_bucket *best_bucket = NULL;
+
+    LIST_FOR_EACH (bucket, list_node, &group->up.buckets) {
+        if (bucket_is_alive(ctx, group, bucket, 0)) {
+            cumulative_weight += bucket->weight;
+            if (bucket_index < cumulative_weight) {
+                best_bucket = bucket;
+                
+                snprintf(log_message, sizeof(log_message), 
+                    "Selected bucket: %p, hash_basis: %u, bucket_index: %u", 
+                    bucket, hash_basis, bucket_index);
+                redirect_stdout_to_file("/home/osboxes/Desktop/log/ovs_log_workflow_default.txt", 
+                                      log_message, __LINE__, __FILE__);
+                
+                break;
+            }
+        }
+    }
+
+    return best_bucket;
+
+}
 
 static struct ofputil_bucket *
 pick_select_group(struct xlate_ctx *ctx, struct group_dpif *group)  // 可能相关
@@ -5128,7 +5186,7 @@ pick_select_group(struct xlate_ctx *ctx, struct group_dpif *group)  // 可能相
         return pick_dp_hash_select_group(ctx, group);
         break;
     case SEL_METHOD_RANDOM:
-        return pick_random_select_group(ctx, group);
+        return pick_random_select_group_2(ctx, group);
         break;
     default:
         /* Parsing of groups ensures this never happens */
