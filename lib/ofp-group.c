@@ -1604,7 +1604,8 @@ parse_group_prop_ntr_selection_method(struct ofpbuf *payload,
     }
 
     if (strcmp("hash", prop->selection_method)
-        && strcmp("dp_hash", prop->selection_method)) {
+        && strcmp("dp_hash", prop->selection_method)
+        && strcmp("random", prop->selection_method)) {
         OFPPROP_LOG(&rl, false,
                     "ntr selection method '%s' is not supported",
                     prop->selection_method);
