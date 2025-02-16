@@ -494,3 +494,5 @@ include datapath-windows/include/automake.mk
 include windows/automake.mk
 include selinux/automake.mk
 include build-aux/automake.mk
+
+EXTRA_DIST += include/my_test/my_log.h
