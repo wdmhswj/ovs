@@ -5169,6 +5169,18 @@ pick_random_select_group_2(struct xlate_ctx *ctx, struct group_dpif *group)
 }
 
 static struct ofputil_bucket *
+pick_random_select_group_3(struct xlate_ctx *ctx, struct group_dpif *group)
+{
+    char log_message[1024];
+    snprintf(log_message, sizeof(log_message), "pick_random_select_group_3 begin");
+    redirect_stdout_to_file("/home/osboxes/Desktop/log/ovs_log_workflow_default.txt", 
+                           log_message, __LINE__, __FILE__);
+
+    uint32_t basis = random_uint32();  // 让每个数据包的哈希值都不同
+    return group_best_live_bucket(ctx, group, basis);
+}
+
+static struct ofputil_bucket *
 pick_select_group(struct xlate_ctx *ctx, struct group_dpif *group)  // 可能相关
 {
     // 记录函数开始执行
@@ -5196,7 +5208,7 @@ pick_select_group(struct xlate_ctx *ctx, struct group_dpif *group)  // 可能相
         return pick_dp_hash_select_group(ctx, group);
         break;
     case SEL_METHOD_RANDOM:
-        return pick_random_select_group(ctx, group);
+        return pick_random_select_group_3(ctx, group);
         break;
     default:
         /* Parsing of groups ensures this never happens */
