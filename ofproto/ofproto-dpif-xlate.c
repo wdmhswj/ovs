@@ -5009,7 +5009,7 @@ pick_random_select_group(struct xlate_ctx *ctx, struct group_dpif *group)
         return NULL; // 没有可用的桶
     }
 
-    random_init(); // 可选的初始化
+    // random_init(); // 可选的初始化
     uint32_t random_value = random_uint32() % weight_total; // 使用 random_uint32()  生成 0 到 weight_total-1 的随机数
     uint32_t cumulative_weight = 0;
     
