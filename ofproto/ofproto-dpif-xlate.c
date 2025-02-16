@@ -69,7 +69,11 @@
 #include "uuid.h"
 #include "vlan-bitmap.h"
 
-#include "random.h"
+// #include "random.h"
+
+#include <stdlib.h>
+#include <time.h>
+
 
 COVERAGE_DEFINE(xlate_actions);
 COVERAGE_DEFINE(xlate_actions_oversize);
@@ -5009,8 +5013,10 @@ pick_random_select_group(struct xlate_ctx *ctx, struct group_dpif *group)
         return NULL; // 没有可用的桶
     }
 
+    srand((unsigned int)time(NULL));
     // random_init(); // 可选的初始化
-    uint32_t random_value = random_uint32() % weight_total; // 使用 random_uint32()  生成 0 到 weight_total-1 的随机数
+    // uint32_t random_value = random_uint32() % weight_total; // 使用 random_uint32()  生成 0 到 weight_total-1 的随机数
+    uint32_t random_value = rand() % weight_total;
     uint32_t cumulative_weight = 0;
     
     struct ofputil_bucket *best_bucket = NULL;
