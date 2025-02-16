@@ -5000,6 +5000,8 @@ pick_random_select_group(struct xlate_ctx *ctx, struct group_dpif *group)
     LIST_FOR_EACH (bucket, list_node, &group->up.buckets) {
         if (bucket_is_alive(ctx, group, bucket, 0)) {
             weight_total += (uint32_t)bucket->weight;
+        } else {
+            xlate_report_bucket_not_live(ctx, bucket);
         }
     }
 
@@ -5010,18 +5012,23 @@ pick_random_select_group(struct xlate_ctx *ctx, struct group_dpif *group)
     random_init(); // 可选的初始化
     uint32_t random_value = random_uint32() % weight_total; // 使用 random_uint32()  生成 0 到 weight_total-1 的随机数
     uint32_t cumulative_weight = 0;
+    
+    struct ofputil_bucket *best_bucket = NULL;
 
     LIST_FOR_EACH (bucket, list_node, &group->up.buckets) {
         if (bucket_is_alive(ctx, group, bucket, 0)) {
             cumulative_weight += bucket->weight;
             if (random_value < cumulative_weight) {
-                return bucket; // 选中当前桶
+                // return bucket; // 选中当前桶
+                best_bucket = bucket;
+                break;
             }
+        } else {
+            xlate_report_bucket_not_live(ctx, bucket);
         }
     }
 
-    OVS_NOT_REACHED(); // 理论上不应该到达这里
-    return NULL;
+    return best_bucket;
 }
 
 static struct ofputil_bucket *
@@ -5057,7 +5064,7 @@ pick_select_group(struct xlate_ctx *ctx, struct group_dpif *group)  // 可能相
         return pick_dp_hash_select_group(ctx, group);
         break;
     case SEL_METHOD_RANDOM:
-        return pick_random_select_group_1(ctx, group);
+        return pick_random_select_group(ctx, group);
         break;
     default:
         /* Parsing of groups ensures this never happens */
