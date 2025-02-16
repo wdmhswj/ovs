@@ -5208,7 +5208,7 @@ pick_select_group(struct xlate_ctx *ctx, struct group_dpif *group)  // 可能相
         return pick_dp_hash_select_group(ctx, group);
         break;
     case SEL_METHOD_RANDOM:
-        return pick_random_select_group_3(ctx, group);
+        return pick_random_select_group(ctx, group);
         break;
     default:
         /* Parsing of groups ensures this never happens */
