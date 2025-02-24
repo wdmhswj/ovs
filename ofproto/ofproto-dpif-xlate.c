@@ -4911,11 +4911,11 @@ pick_ff_group(struct xlate_ctx *ctx, struct group_dpif *group)
 static struct ofputil_bucket *
 pick_default_select_group(struct xlate_ctx *ctx, struct group_dpif *group)
 {
-    // 记录函数开始执行
-    char log_message[1024];
-    snprintf(log_message, sizeof(log_message), "pick_default_select_group begin");
-    // redirect_stdout_to_file("/home/osboxes/Desktop/ovs_log.txt", log_message, __LINE__, __FILE__);
-    redirect_stdout_to_file("/home/osboxes/Desktop/log/ovs_log_workflow_default.txt", log_message, __LINE__, __FILE__);
+    // // 记录函数开始执行
+    // char log_message[1024];
+    // snprintf(log_message, sizeof(log_message), "pick_default_select_group begin");
+    // // redirect_stdout_to_file("/home/osboxes/Desktop/ovs_log.txt", log_message, __LINE__, __FILE__);
+    // redirect_stdout_to_file("/home/osboxes/Desktop/log/ovs_log_workflow_default.txt", log_message, __LINE__, __FILE__);
 
     flow_mask_hash_fields(&ctx->xin->flow, ctx->wc,
                           NX_HASH_FIELDS_SYMMETRIC_L4);
@@ -4926,11 +4926,11 @@ pick_default_select_group(struct xlate_ctx *ctx, struct group_dpif *group)
 static struct ofputil_bucket *
 pick_hash_fields_select_group(struct xlate_ctx *ctx, struct group_dpif *group)
 {
-    // 记录函数开始执行
-    char log_message[1024];
-    snprintf(log_message, sizeof(log_message), "pick_hash_fields_select_group begin");
-    // redirect_stdout_to_file("/home/osboxes/Desktop/ovs_log.txt", log_message, __LINE__, __FILE__);
-    redirect_stdout_to_file("/home/osboxes/Desktop/log/ovs_log_workflow_default.txt", log_message, __LINE__, __FILE__);
+    // // 记录函数开始执行
+    // char log_message[1024];
+    // snprintf(log_message, sizeof(log_message), "pick_hash_fields_select_group begin");
+    // // redirect_stdout_to_file("/home/osboxes/Desktop/ovs_log.txt", log_message, __LINE__, __FILE__);
+    // redirect_stdout_to_file("/home/osboxes/Desktop/log/ovs_log_workflow_default.txt", log_message, __LINE__, __FILE__);
 
     const struct field_array *fields = &group->up.props.fields;
     const uint8_t *mask_values = fields->values;
@@ -4972,11 +4972,11 @@ pick_hash_fields_select_group(struct xlate_ctx *ctx, struct group_dpif *group)
 static struct ofputil_bucket *
 pick_dp_hash_select_group(struct xlate_ctx *ctx, struct group_dpif *group)
 {
-    // 记录函数开始执行
-    char log_message[1024];
-    snprintf(log_message, sizeof(log_message), "pick_dp_hash_select_group begin");
-    // redirect_stdout_to_file("/home/osboxes/Desktop/ovs_log.txt", log_message, __LINE__, __FILE__);
-    redirect_stdout_to_file("/home/osboxes/Desktop/log/ovs_log_workflow_default.txt", log_message, __LINE__, __FILE__);
+    // // 记录函数开始执行
+    // char log_message[1024];
+    // snprintf(log_message, sizeof(log_message), "pick_dp_hash_select_group begin");
+    // // redirect_stdout_to_file("/home/osboxes/Desktop/ovs_log.txt", log_message, __LINE__, __FILE__);
+    // redirect_stdout_to_file("/home/osboxes/Desktop/log/ovs_log_workflow_default.txt", log_message, __LINE__, __FILE__);
 
     uint32_t dp_hash = ctx->xin->flow.dp_hash;
 
@@ -5017,11 +5017,11 @@ pick_dp_hash_select_group(struct xlate_ctx *ctx, struct group_dpif *group)
 static struct ofputil_bucket *
 pick_random_select_group(struct xlate_ctx *ctx, struct group_dpif *group)
 {
-    // 记录函数开始执行
-    char log_message[1024];
-    snprintf(log_message, sizeof(log_message), "pick_random_select_group begin");
-    // redirect_stdout_to_file("/home/osboxes/Desktop/ovs_log.txt", log_message, __LINE__, __FILE__);
-    redirect_stdout_to_file("/home/osboxes/Desktop/log/ovs_log_workflow_default.txt", log_message, __LINE__, __FILE__);
+    // // 记录函数开始执行
+    // char log_message[1024];
+    // snprintf(log_message, sizeof(log_message), "pick_random_select_group begin");
+    // // redirect_stdout_to_file("/home/osboxes/Desktop/ovs_log.txt", log_message, __LINE__, __FILE__);
+    // redirect_stdout_to_file("/home/osboxes/Desktop/log/ovs_log_workflow_default.txt", log_message, __LINE__, __FILE__);
 
     uint32_t dp_hash = ctx->xin->flow.dp_hash;
     if (!dp_hash) {
@@ -5038,19 +5038,19 @@ pick_random_select_group(struct xlate_ctx *ctx, struct group_dpif *group)
         LIST_FOR_EACH (bucket, list_node, &group->up.buckets) {
             if (bucket_is_alive(ctx, group, bucket, 0)) {
                 weight_total += (uint32_t)bucket->weight;
-                snprintf(log_message, sizeof(log_message), 
-                    "Bucket: %p, weight: %u, weight_total: %u", bucket, bucket->weight, weight_total);
-                // redirect_stdout_to_file("/home/osboxes/Desktop/ovs_log.txt", log_message, __LINE__, __FILE__);
-                redirect_stdout_to_file("/home/osboxes/Desktop/log/ovs_log_workflow_default.txt", log_message, __LINE__, __FILE__);
+                // snprintf(log_message, sizeof(log_message), 
+                //     "Bucket: %p, weight: %u, weight_total: %u", bucket, bucket->weight, weight_total);
+                // // redirect_stdout_to_file("/home/osboxes/Desktop/ovs_log.txt", log_message, __LINE__, __FILE__);
+                // redirect_stdout_to_file("/home/osboxes/Desktop/log/ovs_log_workflow_default.txt", log_message, __LINE__, __FILE__);
             } else {
                 xlate_report_bucket_not_live(ctx, bucket);
             }
         }
 
         if (weight_total == 0) {
-            snprintf(log_message, sizeof(log_message), "No available buckets, weight_total is 0");
-            // redirect_stdout_to_file("/home/osboxes/Desktop/ovs_log.txt", log_message, __LINE__, __FILE__);
-            redirect_stdout_to_file("/home/osboxes/Desktop/log/ovs_log_workflow_default.txt", log_message, __LINE__, __FILE__);
+            // snprintf(log_message, sizeof(log_message), "No available buckets, weight_total is 0");
+            // // redirect_stdout_to_file("/home/osboxes/Desktop/ovs_log.txt", log_message, __LINE__, __FILE__);
+            // redirect_stdout_to_file("/home/osboxes/Desktop/log/ovs_log_workflow_default.txt", log_message, __LINE__, __FILE__);
             return NULL; // 没有可用的桶
         }
 
@@ -5074,18 +5074,18 @@ pick_random_select_group(struct xlate_ctx *ctx, struct group_dpif *group)
                 cumulative_weight += bucket->weight;
 
                 // 记录当前桶的累计权重
-                snprintf(log_message, sizeof(log_message), 
-                    "Bucket: %p, cumulative_weight: %u", bucket, cumulative_weight);
-                // redirect_stdout_to_file("/home/osboxes/Desktop/ovs_log.txt", log_message, __LINE__, __FILE__);
-                redirect_stdout_to_file("/home/osboxes/Desktop/log/ovs_log_workflow_default.txt", log_message, __LINE__, __FILE__);
+                // snprintf(log_message, sizeof(log_message), 
+                //     "Bucket: %p, cumulative_weight: %u", bucket, cumulative_weight);
+                // // redirect_stdout_to_file("/home/osboxes/Desktop/ovs_log.txt", log_message, __LINE__, __FILE__);
+                // redirect_stdout_to_file("/home/osboxes/Desktop/log/ovs_log_workflow_default.txt", log_message, __LINE__, __FILE__);
 
                 if (random_value < cumulative_weight) {
                     // return bucket; // 选中当前桶
 
-                    snprintf(log_message, sizeof(log_message), 
-                        "Selected bucket: %p", bucket);
-                    // redirect_stdout_to_file("/home/osboxes/Desktop/ovs_log.txt", log_message, __LINE__, __FILE__);
-                    redirect_stdout_to_file("/home/osboxes/Desktop/log/ovs_log_workflow_default.txt", log_message, __LINE__, __FILE__);
+                    // snprintf(log_message, sizeof(log_message), 
+                    //     "Selected bucket: %p", bucket);
+                    // // redirect_stdout_to_file("/home/osboxes/Desktop/ovs_log.txt", log_message, __LINE__, __FILE__);
+                    // redirect_stdout_to_file("/home/osboxes/Desktop/log/ovs_log_workflow_default.txt", log_message, __LINE__, __FILE__);
 
                     best_bucket = bucket;
                     break;
@@ -5111,10 +5111,10 @@ pick_random_select_group_1(struct xlate_ctx *ctx, struct group_dpif *group)
 static struct ofputil_bucket *
 pick_random_select_group_2(struct xlate_ctx *ctx, struct group_dpif *group)
 {
-    char log_message[1024];
-    snprintf(log_message, sizeof(log_message), "pick_random_select_group_2 begin");
-    redirect_stdout_to_file("/home/osboxes/Desktop/log/ovs_log_workflow_default.txt", 
-                           log_message, __LINE__, __FILE__);
+    // char log_message[1024];
+    // snprintf(log_message, sizeof(log_message), "pick_random_select_group_2 begin");
+    // redirect_stdout_to_file("/home/osboxes/Desktop/log/ovs_log_workflow_default.txt", 
+    //                        log_message, __LINE__, __FILE__);
 
     // 计算总权重
     uint32_t weight_total = 0;
@@ -5153,11 +5153,11 @@ pick_random_select_group_2(struct xlate_ctx *ctx, struct group_dpif *group)
             if (bucket_index < cumulative_weight) {
                 best_bucket = bucket;
                 
-                snprintf(log_message, sizeof(log_message), 
-                    "Selected bucket: %p, hash_basis: %u, bucket_index: %u", 
-                    bucket, hash_basis, bucket_index);
-                redirect_stdout_to_file("/home/osboxes/Desktop/log/ovs_log_workflow_default.txt", 
-                                      log_message, __LINE__, __FILE__);
+                // snprintf(log_message, sizeof(log_message), 
+                //     "Selected bucket: %p, hash_basis: %u, bucket_index: %u", 
+                //     bucket, hash_basis, bucket_index);
+                // redirect_stdout_to_file("/home/osboxes/Desktop/log/ovs_log_workflow_default.txt", 
+                //                       log_message, __LINE__, __FILE__);
                 
                 break;
             }
@@ -5171,10 +5171,10 @@ pick_random_select_group_2(struct xlate_ctx *ctx, struct group_dpif *group)
 static struct ofputil_bucket *
 pick_random_select_group_3(struct xlate_ctx *ctx, struct group_dpif *group)
 {
-    char log_message[1024];
-    snprintf(log_message, sizeof(log_message), "pick_random_select_group_3 begin");
-    redirect_stdout_to_file("/home/osboxes/Desktop/log/ovs_log_workflow_default.txt", 
-                           log_message, __LINE__, __FILE__);
+    // char log_message[1024];
+    // snprintf(log_message, sizeof(log_message), "pick_random_select_group_3 begin");
+    // redirect_stdout_to_file("/home/osboxes/Desktop/log/ovs_log_workflow_default.txt", 
+    //                        log_message, __LINE__, __FILE__);
 
     uint32_t basis = random_uint32();  // 让每个数据包的哈希值都不同
     return group_best_live_bucket(ctx, group, basis);
@@ -5183,11 +5183,11 @@ pick_random_select_group_3(struct xlate_ctx *ctx, struct group_dpif *group)
 static struct ofputil_bucket *
 pick_select_group(struct xlate_ctx *ctx, struct group_dpif *group)  // 可能相关
 {
-    // 记录函数开始执行
-    char log_message[1024];
-    snprintf(log_message, sizeof(log_message), "pick_select_group begin");
-    // redirect_stdout_to_file("/home/osboxes/Desktop/ovs_log.txt", log_message, __LINE__, __FILE__);
-    redirect_stdout_to_file("/home/osboxes/Desktop/log/ovs_log_workflow_default.txt", log_message, __LINE__, __FILE__);
+    // // 记录函数开始执行
+    // char log_message[1024];
+    // snprintf(log_message, sizeof(log_message), "pick_select_group begin");
+    // // redirect_stdout_to_file("/home/osboxes/Desktop/ovs_log.txt", log_message, __LINE__, __FILE__);
+    // redirect_stdout_to_file("/home/osboxes/Desktop/log/ovs_log_workflow_default.txt", log_message, __LINE__, __FILE__);
 
     /* Select groups may access flow keys beyond L2 in order to
      * select a bucket. Recirculate as appropriate to make this possible.
@@ -5196,6 +5196,8 @@ pick_select_group(struct xlate_ctx *ctx, struct group_dpif *group)  // 可能相
         ctx_trigger_freeze(ctx);
         return NULL;
     }
+    
+    return pick_random_select_group(ctx, group);
 
     switch (group->selection_method) {
     case SEL_METHOD_DEFAULT:
