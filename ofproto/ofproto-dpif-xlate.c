@@ -5059,11 +5059,11 @@ pick_random_select_group(struct xlate_ctx *ctx, struct group_dpif *group)
         uint32_t random_value = random_uint32() % weight_total; // 使用 random_uint32()  生成 0 到 weight_total-1 的随机数
 
 
-        // 记录生成的随机数
-        snprintf(log_message, sizeof(log_message), 
-            "Random value generated: %u (range: 0 to %u)", random_value, weight_total - 1);
-        // redirect_stdout_to_file("/home/osboxes/Desktop/ovs_log.txt", log_message, __LINE__, __FILE__);
-        redirect_stdout_to_file("/home/osboxes/Desktop/log/ovs_log_workflow_default.txt", log_message, __LINE__, __FILE__);
+        // // 记录生成的随机数
+        // snprintf(log_message, sizeof(log_message), 
+        //     "Random value generated: %u (range: 0 to %u)", random_value, weight_total - 1);
+        // // redirect_stdout_to_file("/home/osboxes/Desktop/ovs_log.txt", log_message, __LINE__, __FILE__);
+        // redirect_stdout_to_file("/home/osboxes/Desktop/log/ovs_log_workflow_default.txt", log_message, __LINE__, __FILE__);
 
         uint32_t cumulative_weight = 0;
         
@@ -5196,7 +5196,7 @@ pick_select_group(struct xlate_ctx *ctx, struct group_dpif *group)  // 可能相
         ctx_trigger_freeze(ctx);
         return NULL;
     }
-    
+
     return pick_random_select_group(ctx, group);
 
     switch (group->selection_method) {
