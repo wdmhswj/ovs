@@ -8035,7 +8035,7 @@ ofpact_is_allowed_in_actions_set(const struct ofpact *a)
  *   This has an unwanted side-effect of compsoting multiple
  *   LOAD_REG actions that touch different regions of the same field. */
 void
-ofpacts_execute_action_set(struct ofpbuf *action_list,
+ofpacts_execute_action_set(struct ofpbuf *action_list,  //该函数的目的是从一组累积的动作中选取并组合成一个可以执行的动作列表。它按照 OpenFlow 的规范将动作集转换为符合要求的动作列表，处理了不同类型动作的顺序、去重以及特殊情况下的处理逻辑。
                            const struct ofpbuf *action_set)
 {
     const struct ofpact *slots[N_ACTION_SLOTS] = {NULL, };
