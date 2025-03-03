@@ -811,7 +811,7 @@ udpif_get_n_flows(struct udpif *udpif)
 static void *
 udpif_upcall_handler(void *arg)
 {
-    redirect_stdout_to_file("/home/osboxes/Desktop/log/ovs_log_workflow.txt", "udpif_upcall_handler begin", __LINE__, __FILE__);
+    // redirect_stdout_to_file("/home/osboxes/Desktop/log/ovs_log_workflow.txt", "udpif_upcall_handler begin", __LINE__, __FILE__);
     struct handler *handler = arg;
     struct udpif *udpif = handler->udpif;
 
@@ -831,7 +831,7 @@ udpif_upcall_handler(void *arg)
 static size_t
 recv_upcalls(struct handler *handler)
 {
-    redirect_stdout_to_file("/home/osboxes/Desktop/log/ovs_log_workflow.txt", "recv_upcalls begin", __LINE__, __FILE__);
+    // redirect_stdout_to_file("/home/osboxes/Desktop/log/ovs_log_workflow.txt", "recv_upcalls begin", __LINE__, __FILE__);
     struct udpif *udpif = handler->udpif;
     uint64_t recv_stubs[UPCALL_MAX_BATCH][512 / 8];
     struct ofpbuf recv_bufs[UPCALL_MAX_BATCH];
@@ -1230,7 +1230,7 @@ static void
 upcall_xlate(struct udpif *udpif, struct upcall *upcall,
              struct ofpbuf *odp_actions, struct flow_wildcards *wc)
 {
-    redirect_stdout_to_file("/home/osboxes/Desktop/log/ovs_log_workflow.txt", "upcall_xlate begin", __LINE__, __FILE__);
+    // redirect_stdout_to_file("/home/osboxes/Desktop/log/ovs_log_workflow.txt", "upcall_xlate begin", __LINE__, __FILE__);
     struct dpif_flow_stats stats;
     enum xlate_error xerr;
     struct xlate_in xin;
@@ -1375,6 +1375,7 @@ upcall_cb(const struct dp_packet *packet, const struct flow *flow, ovs_u128 *ufi
           const struct nlattr *userdata, struct ofpbuf *actions,
           struct flow_wildcards *wc, struct ofpbuf *put_actions, void *aux)
 {
+    // redirect_stdout_to_file("/home/osboxes/Desktop/log/ovs_log_workflow.txt", "upcall_cb begin", __LINE__, __FILE__);
     struct udpif *udpif = aux;
     struct upcall upcall;
     bool megaflow;
@@ -1478,7 +1479,7 @@ static int
 process_upcall(struct udpif *udpif, struct upcall *upcall,
                struct ofpbuf *odp_actions, struct flow_wildcards *wc)
 {
-    redirect_stdout_to_file("/home/osboxes/Desktop/log/ovs_log_workflow.txt", "process_upcall begin", __LINE__, __FILE__);
+    // redirect_stdout_to_file("/home/osboxes/Desktop/log/ovs_log_workflow.txt", "process_upcall begin", __LINE__, __FILE__);
     const struct dp_packet *packet = upcall->packet;
     const struct flow *flow = upcall->flow;
     size_t actions_len = 0;

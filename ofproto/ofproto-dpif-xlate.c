@@ -4683,8 +4683,8 @@ xlate_group_bucket(struct xlate_ctx *ctx, struct ofputil_bucket *bucket,
 {
     // redirect_stdout_to_file("/home/osboxes/Desktop/ovs_log_workflow.txt", "xlate_group_bucket begin", __LINE__, __FILE__);
     // 打印桶的信息
-    char log_message[256];
-    snprintf(log_message, sizeof(log_message), "Processing bucket ID: %"PRIu32, bucket->bucket_id);
+    // char log_message[256];
+    // snprintf(log_message, sizeof(log_message), "Processing bucket ID: %"PRIu32, bucket->bucket_id);
     // redirect_stdout_to_file("/home/osboxes/Desktop/ovs_log_workflow.txt", log_message, __LINE__, __FILE__);
 
     struct ovs_list *old_trace = ctx->xin->trace;
@@ -4701,7 +4701,7 @@ xlate_group_bucket(struct xlate_ctx *ctx, struct ofputil_bucket *bucket,
                                                         bucket->ofpacts_len);
 
     // 打印即将执行的动作
-    snprintf(log_message, sizeof(log_message), "Executing %u actions in bucket %"PRIu32, (unsigned int)action_set.size, bucket->bucket_id);
+    // snprintf(log_message, sizeof(log_message), "Executing %u actions in bucket %"PRIu32, (unsigned int)action_set.size, bucket->bucket_id);
     // redirect_stdout_to_file("/home/osboxes/Desktop/ovs_log_workflow.txt", log_message, __LINE__, __FILE__);
 
     struct flow old_flow = ctx->xin->flow;
@@ -4715,8 +4715,8 @@ xlate_group_bucket(struct xlate_ctx *ctx, struct ofputil_bucket *bucket,
 
     ofpbuf_uninit(&action_list);
 
-    // 在动作执行完后记录日志
-    snprintf(log_message, sizeof(log_message), "Finished executing actions for bucket %"PRIu32, bucket->bucket_id);
+    // // 在动作执行完后记录日志
+    // snprintf(log_message, sizeof(log_message), "Finished executing actions for bucket %"PRIu32, bucket->bucket_id);
     // redirect_stdout_to_file("/home/osboxes/Desktop/ovs_log_workflow.txt", log_message, __LINE__, __FILE__);
 
     /* Check if need to freeze. */
@@ -4866,40 +4866,40 @@ pick_dp_hash_select_group(struct xlate_ctx *ctx, struct group_dpif *group)
 static struct ofputil_bucket *
 pick_random_select_group(struct xlate_ctx *ctx, struct group_dpif *group)
 {
-    // 记录函数开始执行
-    char log_message[1024];
-    snprintf(log_message, sizeof(log_message), "pick_random_select_group begin");
+    // // 记录函数开始执行
+    // char log_message[1024];
+    // snprintf(log_message, sizeof(log_message), "pick_random_select_group begin");
     // redirect_stdout_to_file("/home/osboxes/Desktop/ovs_log_workflow.txt", log_message, __LINE__, __FILE__);
-    redirect_stdout_to_file("/home/osboxes/Desktop/log/ovs_log_workflow.txt", log_message, __LINE__, __FILE__);
+    // redirect_stdout_to_file("/home/osboxes/Desktop/log/ovs_log_workflow.txt", log_message, __LINE__, __FILE__);
 
     uint32_t weight_total = 0;
     struct ofputil_bucket *bucket;
     LIST_FOR_EACH (bucket, list_node, &group->up.buckets) {
         if (bucket_is_alive(ctx, group, bucket, 0)) {
             weight_total += (uint32_t)bucket->weight;
-            // 格式化日志信息
-            snprintf(log_message, sizeof(log_message), 
-                "Bucket: %p, weight: %u, weight_total: %u", bucket, bucket->weight, weight_total);
+            // // 格式化日志信息
+            // snprintf(log_message, sizeof(log_message), 
+            //     "Bucket: %p, weight: %u, weight_total: %u", bucket, bucket->weight, weight_total);
             // redirect_stdout_to_file("/home/osboxes/Desktop/ovs_log_workflow.txt", log_message, __LINE__, __FILE__);
-            redirect_stdout_to_file("/home/osboxes/Desktop/log/ovs_log_workflow.txt", log_message, __LINE__, __FILE__);
+            // redirect_stdout_to_file("/home/osboxes/Desktop/log/ovs_log_workflow.txt", log_message, __LINE__, __FILE__);
         }
     }
 
     if (weight_total == 0) {
-        snprintf(log_message, sizeof(log_message), "No available buckets, weight_total is 0");
+        // snprintf(log_message, sizeof(log_message), "No available buckets, weight_total is 0");
         // redirect_stdout_to_file("/home/osboxes/Desktop/ovs_log_workflow.txt", log_message, __LINE__, __FILE__);
-        redirect_stdout_to_file("/home/osboxes/Desktop/log/ovs_log_workflow.txt", log_message, __LINE__, __FILE__);
+        // redirect_stdout_to_file("/home/osboxes/Desktop/log/ovs_log_workflow.txt", log_message, __LINE__, __FILE__);
         return NULL; // 没有可用的桶
     }
 
     random_init(); // 可选的初始化
     uint32_t random_value = random_uint32() % weight_total; // 使用 random_uint32()  生成 0 到 weight_total-1 的随机数
 
-    // 记录生成的随机数
-    snprintf(log_message, sizeof(log_message), 
-        "Random value generated: %u (range: 0 to %u)", random_value, weight_total - 1);
+    // // 记录生成的随机数
+    // snprintf(log_message, sizeof(log_message), 
+    //     "Random value generated: %u (range: 0 to %u)", random_value, weight_total - 1);
     // redirect_stdout_to_file("/home/osboxes/Desktop/ovs_log_workflow.txt", log_message, __LINE__, __FILE__);
-    redirect_stdout_to_file("/home/osboxes/Desktop/log/ovs_log_workflow.txt", log_message, __LINE__, __FILE__);
+    // redirect_stdout_to_file("/home/osboxes/Desktop/log/ovs_log_workflow.txt", log_message, __LINE__, __FILE__);
 
     uint32_t cumulative_weight = 0;
 
@@ -4907,17 +4907,17 @@ pick_random_select_group(struct xlate_ctx *ctx, struct group_dpif *group)
         if (bucket_is_alive(ctx, group, bucket, 0)) {
             cumulative_weight += bucket->weight;
 
-            // 记录当前桶的累计权重
-            snprintf(log_message, sizeof(log_message), 
-                "Bucket: %p, cumulative_weight: %u", bucket, cumulative_weight);
+            // // 记录当前桶的累计权重
+            // snprintf(log_message, sizeof(log_message), 
+            //     "Bucket: %p, cumulative_weight: %u", bucket, cumulative_weight);
             // redirect_stdout_to_file("/home/osboxes/Desktop/ovs_log_workflow.txt", log_message, __LINE__, __FILE__);
-            redirect_stdout_to_file("/home/osboxes/Desktop/log/ovs_log_workflow.txt", log_message, __LINE__, __FILE__);
+            // redirect_stdout_to_file("/home/osboxes/Desktop/log/ovs_log_workflow.txt", log_message, __LINE__, __FILE__);
 
             if (random_value < cumulative_weight) {
-                snprintf(log_message, sizeof(log_message), 
-                    "Selected bucket: %p", bucket);
+                // snprintf(log_message, sizeof(log_message), 
+                //     "Selected bucket: %p", bucket);
                 // redirect_stdout_to_file("/home/osboxes/Desktop/ovs_log_workflow.txt", log_message, __LINE__, __FILE__);
-                redirect_stdout_to_file("/home/osboxes/Desktop/log/ovs_log_workflow.txt", log_message, __LINE__, __FILE__);
+                // redirect_stdout_to_file("/home/osboxes/Desktop/log/ovs_log_workflow.txt", log_message, __LINE__, __FILE__);
                 return bucket; // 选中当前桶
             }
         }
@@ -4931,9 +4931,9 @@ pick_random_select_group(struct xlate_ctx *ctx, struct group_dpif *group)
 static struct ofputil_bucket *
 pick_select_group(struct xlate_ctx *ctx, struct group_dpif *group)
 {
-    VLOG_INFO("pick_select_group begin");
-    printf("pick_select_group begin\n");
-    redirect_stdout_to_file("/home/osboxes/Desktop/ovs_log_workflow.txt", "pick_select_group begin", __LINE__, __FILE__);
+    // VLOG_INFO("pick_select_group begin");
+    // printf("pick_select_group begin\n");
+    // redirect_stdout_to_file("/home/osboxes/Desktop/ovs_log_workflow.txt", "pick_select_group begin", __LINE__, __FILE__);
 
     /* Select groups may access flow keys beyond L2 in order to
      * select a bucket. Recirculate as appropriate to make this possible.
@@ -4970,7 +4970,7 @@ static void
 xlate_group_action__(struct xlate_ctx *ctx, struct group_dpif *group,
                      bool is_last_action)
 {
-    redirect_stdout_to_file("/home/osboxes/Desktop/ovs_log_workflow.txt", "xlate_group_action__ begin", __LINE__, __FILE__);
+    // redirect_stdout_to_file("/home/osboxes/Desktop/ovs_log_workflow.txt", "xlate_group_action__ begin", __LINE__, __FILE__);
 
     if (group->up.type == OFPGT11_ALL || group->up.type == OFPGT11_INDIRECT) {
         struct ovs_list *last_bucket = group->up.buckets.prev;
@@ -4985,10 +4985,10 @@ xlate_group_action__(struct xlate_ctx *ctx, struct group_dpif *group,
         if (group->up.type == OFPGT11_SELECT) {
             bucket = pick_select_group(ctx, group);
 
-            char log_message[256];
-            snprintf(log_message, sizeof(log_message), 
-                    "pick_select_group() has returned: Selected bucket: %p", bucket);
-            redirect_stdout_to_file("/home/osboxes/Desktop/ovs_log_workflow.txt", log_message, __LINE__, __FILE__);
+            // char log_message[256];
+            // snprintf(log_message, sizeof(log_message), 
+            //         "pick_select_group() has returned: Selected bucket: %p", bucket);
+            // redirect_stdout_to_file("/home/osboxes/Desktop/ovs_log_workflow.txt", log_message, __LINE__, __FILE__);
 
         } else if (group->up.type == OFPGT11_FF) {
             bucket = pick_ff_group(ctx, group);
@@ -4997,18 +4997,18 @@ xlate_group_action__(struct xlate_ctx *ctx, struct group_dpif *group,
         }
 
         if (bucket) {
-            char log_message[256];
-            snprintf(log_message, sizeof(log_message), 
-                    "bucket not null");
+            // char log_message[256];
+            // snprintf(log_message, sizeof(log_message), 
+            //         "bucket not null");
             // redirect_stdout_to_file("/home/osboxes/Desktop/ovs_log_workflow.txt", log_message, __LINE__, __FILE__);
             xlate_report(ctx, OFT_DETAIL, "using bucket %"PRIu32,
                          bucket->bucket_id);
             xlate_group_bucket(ctx, bucket, is_last_action);
             xlate_group_stats(ctx, group, bucket);
         } else {
-            char log_message[256];
-            snprintf(log_message, sizeof(log_message), 
-                    "bucket is null");
+            // char log_message[256];
+            // snprintf(log_message, sizeof(log_message), 
+            //         "bucket is null");
             // redirect_stdout_to_file("/home/osboxes/Desktop/ovs_log_workflow.txt", log_message, __LINE__, __FILE__);
             xlate_report(ctx, OFT_DETAIL, "no live bucket");
             if (ctx->xin->xcache) {
@@ -5022,7 +5022,7 @@ static bool
 xlate_group_action(struct xlate_ctx *ctx, uint32_t group_id,
                    bool is_last_action)
 {
-    redirect_stdout_to_file("/home/osboxes/Desktop/ovs_log_workflow.txt", "xlate_group_action begin", __LINE__, __FILE__);
+    // redirect_stdout_to_file("/home/osboxes/Desktop/ovs_log_workflow.txt", "xlate_group_action begin", __LINE__, __FILE__);
     if (xlate_resubmit_resource_check(ctx)) {
         struct group_dpif *group;
 
@@ -5030,7 +5030,7 @@ xlate_group_action(struct xlate_ctx *ctx, uint32_t group_id,
         group = group_dpif_lookup(ctx->xbridge->ofproto, group_id,
                                   ctx->xin->tables_version, ctx->xin->xcache);
         if (!group) {
-            redirect_stdout_to_file("/home/osboxes/Desktop/ovs_log_workflow.txt", "group is null", __LINE__, __FILE__);
+            // redirect_stdout_to_file("/home/osboxes/Desktop/ovs_log_workflow.txt", "group is null", __LINE__, __FILE__);
             /* XXX: Should set ctx->error ? */
             xlate_report(ctx, OFT_WARN, "output to nonexistent group %"PRIu32,
                          group_id);
@@ -5567,8 +5567,8 @@ xlate_output_action(struct xlate_ctx *ctx, ofp_port_t port,
         // redirect_stdout_to_file("/home/osboxes/Desktop/ovs_log_workflow.txt", "case default", __LINE__, __FILE__);
         if (port != ctx->xin->flow.in_port.ofp_port) {
             // redirect_stdout_to_file("/home/osboxes/Desktop/ovs_log_workflow.txt", "port != in_port", __LINE__, __FILE__);
-            char log_message[256];
-            snprintf(log_message, sizeof(log_message), "port: %" PRIu32 ", in_port: %" PRIu32, port, ctx->xin->flow.in_port.ofp_port);
+            // char log_message[256];
+            // snprintf(log_message, sizeof(log_message), "port: %" PRIu32 ", in_port: %" PRIu32, port, ctx->xin->flow.in_port.ofp_port);
             // redirect_stdout_to_file("/home/osboxes/Desktop/ovs_log_workflow.txt", log_message, __LINE__, __FILE__);
             compose_output_action(ctx, port, NULL, is_last_action, truncate);
         } else {
@@ -5578,7 +5578,7 @@ xlate_output_action(struct xlate_ctx *ctx, ofp_port_t port,
         break;
     }
 
-    // // redirect_stdout_to_file("/home/osboxes/Desktop/ovs_log_workflow.txt", "other cases", __LINE__, __FILE__);
+    // redirect_stdout_to_file("/home/osboxes/Desktop/ovs_log_workflow.txt", "other cases", __LINE__, __FILE__);
     if (prev_nf_output_iface == NF_OUT_FLOOD) {
         ctx->nf_output_iface = NF_OUT_FLOOD;
     } else if (ctx->nf_output_iface == NF_OUT_DROP) {
@@ -7278,7 +7278,7 @@ do_xlate_actions(const struct ofpact *ofpacts, size_t ofpacts_len,
                  struct xlate_ctx *ctx, bool is_last_action,
                  bool group_bucket_action)
 {
-    redirect_stdout_to_file("/home/osboxes/Desktop/ovs_log_workflow.txt", "do_xlate_actions begin", __LINE__, __FILE__);
+    // redirect_stdout_to_file("/home/osboxes/Desktop/ovs_log_workflow.txt", "do_xlate_actions begin", __LINE__, __FILE__);
     struct flow_wildcards *wc = ctx->wc;
     struct flow *flow = &ctx->xin->flow;
     const struct ofpact *a;
@@ -7327,14 +7327,14 @@ do_xlate_actions(const struct ofpact *ofpacts, size_t ofpacts_len,
 
         switch (a->type) {
         case OFPACT_OUTPUT:
-            redirect_stdout_to_file("/home/osboxes/Desktop/ovs_log_workflow.txt", "case OFPACT_OUTPUT", __LINE__, __FILE__);
+            // redirect_stdout_to_file("/home/osboxes/Desktop/ovs_log_workflow.txt", "case OFPACT_OUTPUT", __LINE__, __FILE__);
             xlate_output_action(ctx, ofpact_get_OUTPUT(a)->port,
                                 ofpact_get_OUTPUT(a)->max_len, true, last,
                                 false, group_bucket_action);
             break;
 
         case OFPACT_GROUP:
-            redirect_stdout_to_file("/home/osboxes/Desktop/ovs_log_workflow.txt", "case OFPACT_GROUP", __LINE__, __FILE__);
+            // redirect_stdout_to_file("/home/osboxes/Desktop/ovs_log_workflow.txt", "case OFPACT_GROUP", __LINE__, __FILE__);
             if (xlate_group_action(ctx, ofpact_get_GROUP(a)->group_id, last)) {
                 /* Group could not be found. */
 
@@ -8081,7 +8081,7 @@ xlate_wc_finish(struct xlate_ctx *ctx)
 enum xlate_error
 xlate_actions(struct xlate_in *xin, struct xlate_out *xout)
 {
-    redirect_stdout_to_file("/home/osboxes/Desktop/log/ovs_log_workflow.txt", "xlate_actions begin", __LINE__, __FILE__);
+    // redirect_stdout_to_file("/home/osboxes/Desktop/log/ovs_log_workflow.txt", "xlate_actions begin", __LINE__, __FILE__);
     *xout = (struct xlate_out) {
         .slow = 0,
         .recircs = RECIRC_REFS_EMPTY_INITIALIZER,
