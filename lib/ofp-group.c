@@ -1580,7 +1580,13 @@ parse_group_prop_ntr_selection_method(struct ofpbuf *payload,
 
     if (strcmp("hash", prop->selection_method)
         && strcmp("dp_hash", prop->selection_method)
-        && strcmp("random", prop->selection_method)) {
+        && strcmp("random_slowaction", prop->selection_method)
+        && strcmp("random_slowcfm", prop->selection_method)
+        && strcmp("random_slowbfd", prop->selection_method)
+        && strcmp("random_slowlacp", prop->selection_method)
+        && strcmp("random_slowstp", prop->selection_method)
+        && strcmp("random_slowlldp", prop->selection_method)
+        && strcmp("random_slowmatch", prop->selection_method)) {
         OFPPROP_LOG(&rl, false,
                     "ntr selection method '%s' is not supported",
                     prop->selection_method);
