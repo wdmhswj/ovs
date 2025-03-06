@@ -7941,9 +7941,9 @@ handle_group_mod(struct ofconn *ofconn, const struct ofp_header *oh)
     if (error) {
         return error;
     }
-    OFPPROP_LOG(&rl, false, "handle_group_mod after error judgement");
-    VLOG_WARN_RL(&rl, "handle_group_mod after error judgement");
-    VLOG_WARN("handle_group_mod after error judgement");
+    // OFPPROP_LOG(&rl, false, "handle_group_mod after error judgement");
+    // VLOG_WARN_RL(&rl, "handle_group_mod after error judgement");
+    // VLOG_WARN("handle_group_mod after error judgement");
     ovs_mutex_lock(&ofproto_mutex);
     ogm.version = ofproto->tables_version + 1;
     error = ofproto_group_mod_start(ofproto, &ogm);
@@ -8584,9 +8584,9 @@ handle_bundle_add(struct ofconn *ofconn, const struct ofp_header *oh)
         free(bmsg);
         return error;
     }
-    OFPPROP_LOG(&rl, false, "handle_bundle_add after error judgement");
-    VLOG_WARN_RL(&rl, "handle_bundle_add after error judgement");
-    VLOG_WARN("handle_bundle_add after error judgement");
+    // OFPPROP_LOG(&rl, false, "handle_bundle_add after error judgement");
+    // VLOG_WARN_RL(&rl, "handle_bundle_add after error judgement");
+    // VLOG_WARN("handle_bundle_add after error judgement");
     /* Now that the embedded message has been successfully decoded, finish up
      * initializing the bundle entry. */
     bmsg->type = type;

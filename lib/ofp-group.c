@@ -1583,7 +1583,7 @@ parse_group_prop_ntr_selection_method(struct ofpbuf *payload,
         && strcmp("random_slowact", prop->selection_method)
         && strcmp("random_slowcfm", prop->selection_method)
         && strcmp("random_slowbfd", prop->selection_method)
-        && strcmp("random_slowlacp", prop->selection_method)
+        && strcmp("random_slowlac", prop->selection_method)
         && strcmp("random_slowstp", prop->selection_method)
         && strcmp("random_slowlldp", prop->selection_method)
         && strcmp("random_slowmat", prop->selection_method)) {
@@ -1654,7 +1654,7 @@ parse_ofp15_group_properties(struct ofpbuf *msg,
         }
 
         if (error) {
-            OFPPROP_LOG(&rl, false, "parse_ofp15_group_properties error not null");
+            // OFPPROP_LOG(&rl, false, "parse_ofp15_group_properties error not null");
             return error;
         }
     }
@@ -1909,7 +1909,7 @@ ofputil_group_desc_format(struct ds *s, const struct ofp_header *oh,
         if (retval) {
             return retval != EOF ? retval : 0;
         }
-        OFPPROP_LOG(&rl, false, "ofputil_group_desc_format retval is null");
+        // OFPPROP_LOG(&rl, false, "ofputil_group_desc_format retval is null");
 
         ds_put_char(s, '\n');
         ds_put_char(s, ' ');
@@ -2226,7 +2226,7 @@ ofputil_pull_ofp15_group_mod(struct ofpbuf *msg, enum ofp_version ofp_version,
     if (error) {
         ofputil_uninit_group_mod(gm);
     }
-    OFPPROP_LOG(&rl, false, "ofputil_pull_ofp15_group_mod return");
+    // OFPPROP_LOG(&rl, false, "ofputil_pull_ofp15_group_mod return");
     return error;
 }
 
@@ -2331,10 +2331,10 @@ ofputil_decode_group_mod(const struct ofp_header *oh,
 
     err = ofputil_check_group_mod(gm);
     if (err) {
-        OFPPROP_LOG(&rl, false, "ofputil_decode_group_mod error not null");
+        // OFPPROP_LOG(&rl, false, "ofputil_decode_group_mod error not null");
         ofputil_uninit_group_mod(gm);
     }
-    OFPPROP_LOG(&rl, false, "ofputil_decode_group_mod return");
+    // OFPPROP_LOG(&rl, false, "ofputil_decode_group_mod return");
     return err;
 }
 
@@ -2389,7 +2389,7 @@ ofputil_group_mod_format__(struct ds *s, enum ofp_version ofp_version,
 
     ofp_print_group(s, gm->group_id, gm->type, &gm->buckets, &gm->props,
                     ofp_version, bucket_command, port_map, table_map);
-    OFPPROP_LOG(&rl, false, "ofputil_group_mod_format__ return");
+    // OFPPROP_LOG(&rl, false, "ofputil_group_mod_format__ return");
 }
 
 enum ofperr
@@ -2404,9 +2404,9 @@ ofputil_group_mod_format(struct ds *s, const struct ofp_header *oh,
     if (error) {
         return error;
     }
-    OFPPROP_LOG(&rl, false, "ofputil_group_mod_format after error judgement");
+    // OFPPROP_LOG(&rl, false, "ofputil_group_mod_format after error judgement");
     ofputil_group_mod_format__(s, oh->version, &gm, port_map, table_map);
     ofputil_uninit_group_mod(&gm);
-    OFPPROP_LOG(&rl, false, "ofputil_group_mod_format return");
+    // OFPPROP_LOG(&rl, false, "ofputil_group_mod_format return");
     return 0;
 }

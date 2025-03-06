@@ -5266,8 +5266,8 @@ group_set_selection_method(struct group_dpif *group)
     } else if (!strcmp(selection_method, "random_slowstp")) {
         VLOG_DBG("Selection method specified: random_slowstp.");
         group->selection_method = SEL_METHOD_RANDOM_SLOWSTP;
-    } else if (!strcmp(selection_method, "random_slowlacp")) {
-        VLOG_DBG("Selection method specified: random_slowlacp.");
+    } else if (!strcmp(selection_method, "random_slowlac")) {
+        VLOG_DBG("Selection method specified: random_slowlac.");
         group->selection_method = SEL_METHOD_RANDOM_SLOWLACP;
     } else if (!strcmp(selection_method, "random_slowbfd")) {
         VLOG_DBG("Selection method specified: random_slowbfd.");
