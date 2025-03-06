@@ -70,6 +70,7 @@
 
 #include "random.h"
 #include "include/my_test/my_log.h"
+static is_rand_initialized = false;
 
 COVERAGE_DEFINE(xlate_actions);
 COVERAGE_DEFINE(xlate_actions_oversize);
@@ -2097,6 +2098,46 @@ group_best_live_bucket(const struct xlate_ctx *ctx,         // 相关
 
     return best_bucket;
 }
+
+static struct ofputil_bucket *
+group_best_live_bucket_random(const struct xlate_ctx *ctx,         // 相关
+                       const struct group_dpif *group,
+                       uint32_t basis)
+{
+    uint32_t weight_total = 0;
+
+    if(!is_rand_initialized) {
+    	random_init();
+    	is_rand_initialized = true;
+    }
+    struct ofputil_bucket *bucket = NULL;
+    LIST_FOR_EACH (bucket, list_node, &group->up.buckets) {
+        if (bucket_is_alive(ctx, group, bucket, 0)) {
+            weight_total += (uint32_t)bucket->weight;
+        } else {
+            xlate_report_bucket_not_live(ctx, bucket);
+        }
+    }
+
+    uint32_t random_value = random_uint32() % weight_total; // 使用 random_uint32()  生成 0 到 weight_total-1 的随机数
+
+    uint32_t cumulative_weight = 0;
+    bucket = NULL;
+    LIST_FOR_EACH (bucket, list_node, &group->up.buckets) {
+        if (bucket_is_alive(ctx, group, bucket, 0)) {
+            cumulative_weight += bucket->weight;
+
+            if (random_value < cumulative_weight) {
+                return bucket; // 选中当前桶
+            }
+        } else {
+            xlate_report_bucket_not_live(ctx, bucket);
+        }
+    }
+
+    return bucket;	// NULL
+}
+
 
 static bool
 xbundle_trunks_vlan(const struct xbundle *bundle, uint16_t vlan)
@@ -4876,7 +4917,7 @@ pick_random_select_group(struct xlate_ctx *ctx, struct group_dpif *group)
     struct ofputil_bucket *bucket;
 
     ctx->xout->slow |= SLOW_ACTION;
-    
+
     LIST_FOR_EACH (bucket, list_node, &group->up.buckets) {
         if (bucket_is_alive(ctx, group, bucket, 0)) {
             weight_total += (uint32_t)bucket->weight;
@@ -4930,6 +4971,19 @@ pick_random_select_group(struct xlate_ctx *ctx, struct group_dpif *group)
     return NULL;
 }
 
+static struct ofputil_bucket *
+pick_random_select_group_1(struct xlate_ctx *ctx, struct group_dpif *group)
+{
+    struct ofputil_bucket *bucket;
+    uint32_t basis;
+
+    ctx->xout->slow |= SLOW_ACTION;
+
+    basis = hash_bytes(ctx->xin->flow.dl_dst, sizeof ctx->xin->flow.dl_dst, 0);
+    bucket = group_best_live_bucket_random(ctx, group, basis);
+    
+    return bucket;
+}
 
 static struct ofputil_bucket *
 pick_select_group(struct xlate_ctx *ctx, struct group_dpif *group)
@@ -4959,7 +5013,7 @@ pick_select_group(struct xlate_ctx *ctx, struct group_dpif *group)
         return pick_dp_hash_select_group(ctx, group);
         break;
     case SEL_METHOD_RANDOM:
-        return pick_random_select_group(ctx, group);
+        return pick_random_select_group_1(ctx, group);
         break;
     default:
         /* Parsing of groups ensures this never happens */
