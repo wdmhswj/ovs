@@ -4874,6 +4874,9 @@ pick_random_select_group(struct xlate_ctx *ctx, struct group_dpif *group)
 
     uint32_t weight_total = 0;
     struct ofputil_bucket *bucket;
+
+    ctx->xout->slow |= SLOW_ACTION;
+    
     LIST_FOR_EACH (bucket, list_node, &group->up.buckets) {
         if (bucket_is_alive(ctx, group, bucket, 0)) {
             weight_total += (uint32_t)bucket->weight;
