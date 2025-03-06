@@ -4979,7 +4979,7 @@ pick_random_select_group_1(struct xlate_ctx *ctx, struct group_dpif *group)
 
     ctx->xout->slow |= SLOW_ACTION;
 
-    basis = hash_bytes(ctx->xin->flow.dl_dst, sizeof ctx->xin->flow.dl_dst, 0);
+    // basis = hash_bytes(ctx->xin->flow.dl_dst, sizeof ctx->xin->flow.dl_dst, 0);
     bucket = group_best_live_bucket_random(ctx, group, basis);
     
     return bucket;
