@@ -292,7 +292,7 @@ int ovs_dp_upcall(struct datapath *dp, struct sk_buff *skb,
 {
 	// redirect_stdout_to_file("/home/osboxes/Desktop/log/ovs_log_workflow.txt", "ovs_dp_upcall begin", __LINE__, __FILE__);
 	// kernel_log("ovs_dp_upcall begin", __LINE__, __FILE__);
-	OVS_NLERR(true, "ovs_dp_upcall begin");
+	// OVS_NLERR(true, "ovs_dp_upcall begin");
 	struct dp_stats_percpu *stats;
 	int err;
 

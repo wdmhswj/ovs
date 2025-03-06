@@ -45,7 +45,7 @@ static struct vport_ops ovs_netdev_vport_ops;
 void netdev_port_receive(struct sk_buff *skb, struct ip_tunnel_info *tun_info)	// 处理接收报文
 {
 	// redirect_stdout_to_file("/home/osboxes/Desktop/log/ovs_log_workflow.txt", "netdev_port_receive begin", __LINE__, __FILE__);
-	kernel_log("netdev_port_receive begin", __LINE__, __FILE__);
+	// kernel_log("netdev_port_receive begin", __LINE__, __FILE__);
 	struct vport *vport;
 
 	vport = ovs_netdev_get_vport(skb->dev);

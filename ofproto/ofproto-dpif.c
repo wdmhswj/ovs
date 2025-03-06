@@ -5254,9 +5254,27 @@ group_set_selection_method(struct group_dpif *group)
             VLOG_DBG("No hash fields. Falling back to default hash method.");
             group->selection_method = SEL_METHOD_DEFAULT;
         }
-    } else if (!strcmp(selection_method, "random")) {
-            VLOG_DBG("Selection method specified: random.");
-            group->selection_method = SEL_METHOD_RANDOM;
+    } else if (!strcmp(selection_method, "random_slowaction")) {
+        VLOG_DBG("Selection method specified: random_slowaction.");
+        group->selection_method = SEL_METHOD_RANDOM_SLOWACTION;
+    } else if (!strcmp(selection_method, "random_slowlldp")) {
+        VLOG_DBG("Selection method specified: random_slowlldp.");
+        group->selection_method = SEL_METHOD_RANDOM_SLOWLLDP;
+    } else if (!strcmp(selection_method, "random_slowmatch")) {
+        VLOG_DBG("Selection method specified: random_slowmatch.");
+        group->selection_method = SEL_METHOD_RANDOM_SLOWMATCH;
+    } else if (!strcmp(selection_method, "random_slowstp")) {
+        VLOG_DBG("Selection method specified: random_slowstp.");
+        group->selection_method = SEL_METHOD_RANDOM_SLOWSTP;
+    } else if (!strcmp(selection_method, "random_slowlacp")) {
+        VLOG_DBG("Selection method specified: random_slowlacp.");
+        group->selection_method = SEL_METHOD_RANDOM_SLOWLACP;
+    } else if (!strcmp(selection_method, "random_slowbfd")) {
+        VLOG_DBG("Selection method specified: random_slowbfd.");
+        group->selection_method = SEL_METHOD_RANDOM_SLOWBFD;
+    } else if (!strcmp(selection_method, "random_slowcfm")) {
+        VLOG_DBG("Selection method specified: random_slowcfm.");
+        group->selection_method = SEL_METHOD_RANDOM_SLOWCFM;
     } else {
         /* Parsing of groups should ensure this never happens */
         OVS_NOT_REACHED();

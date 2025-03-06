@@ -1916,10 +1916,10 @@ ofputil_group_desc_format(struct ds *s, const struct ofp_header *oh,
 void
 ofputil_uninit_group_mod(struct ofputil_group_mod *gm)
 {
-    OFPPROP_LOG(&rl, false, "ofputil_uninit_group_mod begin");
+    // OFPPROP_LOG(&rl, false, "ofputil_uninit_group_mod begin");
     ofputil_bucket_list_destroy(&gm->buckets);
     ofputil_group_properties_destroy(&gm->props);
-    OFPPROP_LOG(&rl, false, "ofputil_uninit_group_mod return");
+    // OFPPROP_LOG(&rl, false, "ofputil_uninit_group_mod return");
 }
 
 static void
@@ -2227,7 +2227,7 @@ ofputil_pull_ofp15_group_mod(struct ofpbuf *msg, enum ofp_version ofp_version,
 static enum ofperr
 ofputil_check_group_mod(const struct ofputil_group_mod *gm)
 {
-    OFPPROP_LOG(&rl, false, "ofputil_check_group_mod begin");
+    // OFPPROP_LOG(&rl, false, "ofputil_check_group_mod begin");
     switch (gm->type) {
     case OFPGT11_INDIRECT:
         if (gm->command != OFPGC11_DELETE
@@ -2338,7 +2338,7 @@ ofputil_group_mod_format__(struct ds *s, enum ofp_version ofp_version,
                            const struct ofputil_port_map *port_map,
                            const struct ofputil_table_map *table_map)
 {
-    OFPPROP_LOG(&rl, false, "ofputil_group_mod_format__ begin");
+    // OFPPROP_LOG(&rl, false, "ofputil_group_mod_format__ begin");
     bool bucket_command = false;
 
     ds_put_char(s, '\n');

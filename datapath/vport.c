@@ -532,7 +532,7 @@ int ovs_vport_receive(struct vport *vport, struct sk_buff *skb,
 		      const struct ip_tunnel_info *tun_info)
 {
 	// redirect_stdout_to_file("/home/osboxes/Desktop/log/ovs_log_workflow.txt", "ovs_vport_receive begin", __LINE__, __FILE__);
-	kernel_log("ovs_vport_receive begin", __LINE__, __FILE__);
+	// kernel_log("ovs_vport_receive begin", __LINE__, __FILE__);
 	struct sw_flow_key key;
 	int error;
 

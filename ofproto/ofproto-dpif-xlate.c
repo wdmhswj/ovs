@@ -4930,13 +4930,14 @@ pick_random_select_group(struct xlate_ctx *ctx, struct group_dpif *group)
     }
 
     if (weight_total == 0) {
-        // snprintf(log_message, sizeof(log_message), "No available buckets, weight_total is 0");
-        // redirect_stdout_to_file("/home/osboxes/Desktop/ovs_log_workflow.txt", log_message, __LINE__, __FILE__);
-        // redirect_stdout_to_file("/home/osboxes/Desktop/log/ovs_log_workflow.txt", log_message, __LINE__, __FILE__);
         return NULL; // 没有可用的桶
     }
 
-    random_init(); // 可选的初始化
+    if(!is_rand_initialized) {
+        random_init();
+        is_rand_initialized = true;
+    }
+    
     uint32_t random_value = random_uint32() % weight_total; // 使用 random_uint32()  生成 0 到 weight_total-1 的随机数
 
     // // 记录生成的随机数
@@ -4966,24 +4967,102 @@ pick_random_select_group(struct xlate_ctx *ctx, struct group_dpif *group)
             }
         }
     }
-
-    OVS_NOT_REACHED(); // 理论上不应该到达这里
     return NULL;
 }
 
 static struct ofputil_bucket *
-pick_random_select_group_1(struct xlate_ctx *ctx, struct group_dpif *group)
+pick_random_select_group_slowaction(struct xlate_ctx *ctx, struct group_dpif *group)
 {
     struct ofputil_bucket *bucket;
     uint32_t basis;
 
     ctx->xout->slow |= SLOW_ACTION;
 
-    // basis = hash_bytes(ctx->xin->flow.dl_dst, sizeof ctx->xin->flow.dl_dst, 0);
     bucket = group_best_live_bucket_random(ctx, group, basis);
     
     return bucket;
 }
+
+static struct ofputil_bucket *
+pick_random_select_group_slowlldp(struct xlate_ctx *ctx, struct group_dpif *group)
+{
+    struct ofputil_bucket *bucket;
+    uint32_t basis;
+
+    ctx->xout->slow |= SLOW_LLDP;
+    
+    bucket = group_best_live_bucket_random(ctx, group, basis);
+    
+    return bucket;
+}
+
+static struct ofputil_bucket *
+pick_random_select_group_slowmatch(struct xlate_ctx *ctx, struct group_dpif *group)
+{
+    struct ofputil_bucket *bucket;
+    uint32_t basis;
+    
+    ctx->xout->slow |= SLOW_MATCH;
+
+    bucket = group_best_live_bucket_random(ctx, group, basis);
+    
+    return bucket;
+}
+
+static struct ofputil_bucket *
+pick_random_select_group_slowstp(struct xlate_ctx *ctx, struct group_dpif *group)
+{
+    struct ofputil_bucket *bucket;
+    uint32_t basis;
+    
+    ctx->xout->slow |= SLOW_STP;
+
+    bucket = group_best_live_bucket_random(ctx, group, basis);
+    
+    return bucket;
+}
+
+
+static struct ofputil_bucket *
+pick_random_select_group_slowlacp(struct xlate_ctx *ctx, struct group_dpif *group)
+{
+    struct ofputil_bucket *bucket;
+    uint32_t basis;
+    
+    ctx->xout->slow |= SLOW_LACP;
+
+    bucket = group_best_live_bucket_random(ctx, group, basis);
+    
+    return bucket;
+}
+
+static struct ofputil_bucket *
+pick_random_select_group_slowbfd(struct xlate_ctx *ctx, struct group_dpif *group)
+{
+    struct ofputil_bucket *bucket;
+    uint32_t basis;
+    
+    ctx->xout->slow |= SLOW_BFD;
+
+    bucket = group_best_live_bucket_random(ctx, group, basis);
+    
+    return bucket;
+}
+
+static struct ofputil_bucket *
+pick_random_select_group_slowcfm(struct xlate_ctx *ctx, struct group_dpif *group)
+{
+    struct ofputil_bucket *bucket;
+    uint32_t basis;
+    
+    ctx->xout->slow |= SLOW_CFM;
+
+    bucket = group_best_live_bucket_random(ctx, group, basis);
+    
+    return bucket;
+}
+
+
 
 static struct ofputil_bucket *
 pick_select_group(struct xlate_ctx *ctx, struct group_dpif *group)
@@ -5000,8 +5079,6 @@ pick_select_group(struct xlate_ctx *ctx, struct group_dpif *group)
         return NULL;
     }
 
-    // return pick_random_select_group(ctx, group);                // 直接默认就使用自定义的 random 方法
-
     switch (group->selection_method) {
     case SEL_METHOD_DEFAULT:
         return pick_default_select_group(ctx, group);
@@ -5012,8 +5089,26 @@ pick_select_group(struct xlate_ctx *ctx, struct group_dpif *group)
     case SEL_METHOD_DP_HASH:
         return pick_dp_hash_select_group(ctx, group);
         break;
-    case SEL_METHOD_RANDOM:
-        return pick_random_select_group_1(ctx, group);
+    case SEL_METHOD_RANDOM_SLOWACTION:
+        return pick_random_select_group_slowaction(ctx, group);
+        break;
+    case SEL_METHOD_RANDOM_SLOWLLDP:
+        return pick_random_select_group_slowlldp(ctx, group);
+        break;
+    case SEL_METHOD_RANDOM_SLOWMATCH:
+        return pick_random_select_group_slowmatch(ctx, group);
+        break;
+    case SEL_METHOD_RANDOM_SLOWSTP:
+        return pick_random_select_group_slowstp(ctx, group);
+        break;
+    case SEL_METHOD_RANDOM_SLOWLACP:
+        return pick_random_select_group_slowlacp(ctx, group);
+        break;
+    case SEL_METHOD_RANDOM_SLOWBFD:
+        return pick_random_select_group_slowbfd(ctx, group);
+        break;
+    case SEL_METHOD_RANDOM_SLOWCFM:
+        return pick_random_select_group_slowcfm(ctx, group);
         break;
     default:
         /* Parsing of groups ensures this never happens */

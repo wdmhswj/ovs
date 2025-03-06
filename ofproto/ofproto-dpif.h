@@ -123,7 +123,14 @@ enum group_selection_method {
     SEL_METHOD_DEFAULT,
     SEL_METHOD_DP_HASH,
     SEL_METHOD_HASH,
-    SEL_METHOD_RANDOM,  // 新增：将bucket的weight作为随机概率
+    // SEL_METHOD_RANDOM,  // 新增：将bucket的weight作为随机概率
+    SEL_METHOD_RANDOM_SLOWACTION,
+    SEL_METHOD_RANDOM_SLOWLLDP,
+    SEL_METHOD_RANDOM_SLOWMATCH,
+    SEL_METHOD_RANDOM_SLOWSTP,
+    SEL_METHOD_RANDOM_SLOWLACP,
+    SEL_METHOD_RANDOM_SLOWBFD,
+    SEL_METHOD_RANDOM_SLOWCFM,
 };
 
 struct group_dpif {
