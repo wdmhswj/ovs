@@ -1580,13 +1580,13 @@ parse_group_prop_ntr_selection_method(struct ofpbuf *payload,
 
     if (strcmp("hash", prop->selection_method)
         && strcmp("dp_hash", prop->selection_method)
-        && strcmp("random_slowaction", prop->selection_method)
+        && strcmp("random_slowact", prop->selection_method)
         && strcmp("random_slowcfm", prop->selection_method)
         && strcmp("random_slowbfd", prop->selection_method)
         && strcmp("random_slowlacp", prop->selection_method)
         && strcmp("random_slowstp", prop->selection_method)
         && strcmp("random_slowlldp", prop->selection_method)
-        && strcmp("random_slowmatch", prop->selection_method)) {
+        && strcmp("random_slowmat", prop->selection_method)) {
         OFPPROP_LOG(&rl, false,
                     "ntr selection method '%s' is not supported",
                     prop->selection_method);
@@ -1618,7 +1618,7 @@ parse_group_prop_ntr_selection_method(struct ofpbuf *payload,
         /* Selection_method "hash: w/o fields means default hash method. */
         gp->fields.values_size = 0;
     }
-    OFPPROP_LOG(&rl, false, "test");
+    // OFPPROP_LOG(&rl, false, "test");
     return 0;
 }
 
@@ -1658,7 +1658,7 @@ parse_ofp15_group_properties(struct ofpbuf *msg,
             return error;
         }
     }
-    OFPPROP_LOG(&rl, false, "parse_ofp15_group_properties return");
+    // OFPPROP_LOG(&rl, false, "parse_ofp15_group_properties return");
     return 0;
 }
 
@@ -1754,12 +1754,12 @@ ofputil_decode_ofp15_group_desc_reply(struct ofputil_group_desc *gd,
     error = parse_ofp15_group_properties(
         msg, gd->type, OFPGC15_ADD, &gd->props,
         length - sizeof *ogds - bucket_list_len);
-    OFPPROP_LOG(&rl, false, "ofputil_decode_ofp15_group_desc_reply before error judgement");
+    // OFPPROP_LOG(&rl, false, "ofputil_decode_ofp15_group_desc_reply before error judgement");
     if (error) {
-        OFPPROP_LOG(&rl, false, "ofputil_decode_ofp15_group_desc_reply error not null");
+        // OFPPROP_LOG(&rl, false, "ofputil_decode_ofp15_group_desc_reply error not null");
         ofputil_uninit_group_desc(gd);
     }
-    OFPPROP_LOG(&rl, false, "ofputil_decode_ofp15_group_desc_reply return");
+    // OFPPROP_LOG(&rl, false, "ofputil_decode_ofp15_group_desc_reply return");
     return error;
 }
 
