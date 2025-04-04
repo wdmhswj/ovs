@@ -2135,7 +2135,7 @@ group_best_live_bucket_random(const struct xlate_ctx *ctx,         // 相关
         }
     }
 
-    return bucket;	// NULL
+    return bucket;	// 一般情况无法到达此处，返回 NULL/for循环最后一个bucket
 }
 
 
